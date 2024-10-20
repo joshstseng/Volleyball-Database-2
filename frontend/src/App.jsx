@@ -1,35 +1,58 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState, useEffect } from 'react'
 import './App.css'
+import PlayerList from './PlayerList'
+import PlayerForm from './PlayerForm'
 
 function App() {
-  const [count, setCount] = useState(0)
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+  const [players, setPlayers] = useState([])
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [currentPlayer, setCurrentPlayer] = useState({})
+
+  useEffect(() => {
+    fetchPlayers()
+  }, [])
+
+  const fetchPlayers = async () => {
+    const response = await fetch("http://127.0.0.1:5000/players")
+    const data = await response.json()
+    setPlayers(data.players)
+    console.log(data.players)
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false)
+    setCurrentPlayer({})
+  }
+
+  const openCreateModal = () => {
+    if (!isModalOpen) {
+      setIsModalOpen(true)
+    }
+  }
+
+  const openEditModal = (player) => {
+    if (isModalOpen) return
+    setCurrentPlayer(player)
+    setIsModalOpen(true)
+  }
+
+  const onUpdate = () => {
+    closeModal()
+    fetchPlayers()
+  }
+
+  return <><PlayerList players={players} updatePlayer={openEditModal} updateCallback={onUpdate}/>
+  <button onClick={openCreateModal}>Create New Player</button>
+    {
+      isModalOpen && <div className="modal">
+        <div className="modal-content">
+          <span className="close" onClick={closeModal}>&times;</span>
+          <PlayerForm existingPlayer={currentPlayer} updateCallback={onUpdate}/>
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    }
+  </>
 }
 
 export default App

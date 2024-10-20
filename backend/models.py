@@ -19,9 +19,8 @@ class Player(db.Model):
     player_id = db.Column(db.Integer, primary_key=True)
     player_first = db.Column(db.String(50), unique=False, nullable=False)
     player_last = db.Column(db.String(50), unique=False, nullable=False)
-    team_id = db.Column(db.ForeignKey('team.team_id'), nullable=False)
-    player_number = db.Column(db.Integer)
-    player_dob = db.Column(db.DateTime)
+    team_id = db.Column(db.String(50), unique=False)
+    player_number = db.Column(db.Integer, unique=False)
     player_position = db.Column(db.String(3), unique=False)
     
     def to_json(self):
@@ -31,6 +30,5 @@ class Player(db.Model):
             "playerLast": self.player_last,
             "teamId": self.team_id,
             "playerNumber": self.player_number,
-            "playerDob": self.player_dob,
             "playerPosition": self.player_position
         }
