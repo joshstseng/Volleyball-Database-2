@@ -30,7 +30,7 @@ def create_player():
                          player_dob=player_dob,
                          player_position=player_position)
 
-    try:
+    try: # sldkfjdsl
         db.session.add(new_contact)
         db.session.commit()
     except Exception as e:
