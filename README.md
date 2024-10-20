@@ -19,3 +19,4 @@ Note: Python and Node are required to run the app.
 1. Open a new terminal window
 2. `cd frontend`
 3. `npm run dev`
+4. Open [http://localhost:5173/](http://localhost:5173/)
