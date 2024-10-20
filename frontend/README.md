@@ -1,8 +1,21 @@
-# React + Vite
+# Volleyball Players Database
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Database Design:
 
-Currently, two official plugins are available:
+**team**(*team_id*, team_name, numWin, numLoss)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+**players**(*player_id*, player_first, player_last, team_id, player_number, player_dob)
+
+## How to use:
+
+Note: Python and Node are required to run the app.
+
+##### Run the backend:
+1. Open a terminal window
+2. `cd backend`
+3. `python3 main.py` (mac) - `python main.py` (windows)
+
+#### Run the frontend:
+1. Open a new terminal window
+2. `cd frontend`
+3. `npm run dev`
