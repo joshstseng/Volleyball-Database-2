@@ -30,7 +30,7 @@ def create_player():
                          player_dob=player_dob,
                          player_position=player_position)
 
-    try: # sldkfjdsl
+    try:
         db.session.add(new_contact)
         db.session.commit()
     except Exception as e:
@@ -44,7 +44,30 @@ def update_player(player_id):
 
     if not player:
         return jsonify({"message": "User not found"}), 404
+    
+    data = request.json
+    player.player_first = data.get("playerFirst", player.player_first)
+    player.player_last = data.get("playerLast", player.player_last)
+    player.team_id = data.get("teamId", player.team_id)
+    player.player_number = data.get("playerNumber", player.player_number)
+    player.player_dob = data.get("playerDob", player.player_dob)
+    player.player_position = data.get("playerPosition", player.player_position)
 
+    db.session.commit()
+
+    return jsonify({"message": "Player updated."}), 200
+
+@app.route("/delete_contact/<int:player_id>", methods=["DELETE"])
+def delete_contact(player_id):
+    player = Player.query.get(player_id)
+
+    if not player:
+        return jsonify({"message": "User not found"}), 404
+
+    db.session.delete(player)
+    db.session.commit()
+
+    return jsonify({"message": "User deleted!"}), 200
 
 
 if __name__ == "__main__":
