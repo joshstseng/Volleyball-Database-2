@@ -1,7 +1,8 @@
 from flask import request, jsonify
 from config import app, db
 from models import Player, Team
-
+from sqlalchemy import text
+from sqlalchemy.orm import Session
 
 @app.route("/players", methods=["GET"])
 def get_players():
@@ -71,6 +72,23 @@ def delete_player(player_id):
     db.session.commit()
 
     return jsonify({"message": "User deleted!"}), 200
+
+@app.route("/players_by_position", methods=["GET"])
+def get_players_by_position():
+    position = request.args.get("position")  # Get the 'position' from query parameters
+    
+    if position:
+        query = text("SELECT * FROM player WHERE player_position = :position")
+        
+        # Use a session to execute the query
+        with db.engine.connect() as connection:
+            result = connection.execute(query, {"position": position})
+            players = result.fetchall()
+    else:
+        players = Player.query.all()
+
+    json_players = list(map(lambda x: x._asdict(), players))  # Convert to dictionary for JSON
+    return jsonify({"players": json_players})
 
 
 if __name__ == "__main__":

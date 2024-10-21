@@ -1,3 +1,13 @@
+body {
+  background-color: #252525; /* Dark background */
+  color: #f0f0f0; /* Light text for contrast */
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+}
+
+/* Modal Styles */
 .modal {
   position: fixed;
   z-index: 1;
@@ -6,63 +16,193 @@
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.6); /* Slightly darker background for better contrast */
 }
 
 .modal-content {
-  background-color: #fefefe;
+  background-color: #2a2a2a; /* Darker modal content */
   margin: 10% auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
+  padding: 30px;
+  border: 1px solid #444;
+  width: 40%;
+  border-radius: 15px;
+  font-size: 1.1rem;
+  color: #f0f0f0;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
 }
 
 .close {
-  color: #aaa;
+  color: #bbb;
   float: right;
   font-size: 28px;
   font-weight: bold;
+  cursor: pointer;
 }
 
-/* #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+.close:hover, .close:focus {
+  color: #f0f0f0;
+  text-decoration: none;
+  cursor: pointer;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Button Styles */
+button {
+  background-color: #444; /* Dark button background */
+  color: #f0f0f0; /* Light text */
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Smooth hover effect */
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+button:hover {
+  background-color: #666; /* Lighter shade on hover */
 }
 
-.card {
-  padding: 2em;
+/* Table Styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 1rem;
+  background-color: #2a2a2a; /* Dark table background */
+  color: #f0f0f0; /* Light text */
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.4); /* Subtle shadow */
 }
 
-.read-the-docs {
-  color: #888;
-} */
+th, td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #444;
+}
+
+th {
+  background-color: #333;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+tr {
+  transition: background-color 0.3s ease;
+}
+
+tr:hover {
+  background-color: #444; /* Lighter row on hover */
+}
+
+td {
+  background-color: #2a2a2a; /* Darker cells */
+}
+
+thead {
+  background-color: #3a3a3a; /* Dark header */
+  text-transform: uppercase;
+  letter-spacing: 0.05rem;
+}
+
+/* Input and Form Styles */
+input, select, label {
+  background-color: #333;
+  color: #f0f0f0;
+  border: 1px solid #555;
+  border-radius: 5px;
+  padding: 10px;
+  margin-top: 10px;
+  width: 100%;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: #888; /* Slight color change on focus */
+}
+
+label {
+  margin-bottom: 5px;
+  display: block;
+}
+
+form {
+  margin-top: 20px;
+}
+
+/* Hover Effect for Inputs */
+input:hover, select:hover {
+  border-color: #666;
+}
+
+/* General Hover Effect for Elements */
+button:hover, input:hover, select:hover {
+  filter: brightness(1.2); /* Subtle brightening effect */
+}
+
+/* Close Button Position */
+.close {
+  color: #bbb;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.modal-content {
+  background-color: #2a2a2a;
+  margin: 10% auto;
+  padding: 30px;
+  border: 1px solid #444;
+  width: 40%;
+  border-radius: 15px;
+  font-size: 1.1rem;
+  color: #f0f0f0;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+
+/* Styling for the modalParameter class */
+.modalParameter {
+  font-size: 1.2rem; /* Larger font size for distinction */
+  font-weight: bold; /* Make the label bold */
+  color: #f0f0f0; /* Light text color */
+  margin-bottom: 10px; /* Add spacing below the label */
+  display: block; /* Ensure the label is on its own line */
+  background: none; /* No background */
+  border: none; /* No border */
+  padding: 0; /* No padding */
+}
+
+/* Flexbox layout for table and controls */
+.player-list-container {
+  display: flex;
+  justify-content: space-between; /* Align controls on the side */
+  align-items: flex-start;
+  margin: 20px 0;
+}
+
+.table-container {
+  flex: 5; /* Let the table take up most of the space */
+  margin-right: 20px; /* Add space between the table and controls */
+}
+
+.player-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1; /* Make the controls take less space */
+}
+
+.player-controls button {
+  margin-bottom: 20px; /* Space between button and dropdown */
+}
+
+.position-select-container select {
+  padding: 8px;
+  border-radius: 5px;
+  background-color: #333;
+  color: #f0f0f0;
+  border: 1px solid #555;
+}

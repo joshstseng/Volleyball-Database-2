@@ -39,50 +39,55 @@ const PlayerForm = ({ existingPlayer = {}, updateCallback}) => {
     }
 
     return (
-
-    <form onSubmit={onSubmit}>
-        <div>
-            <label htmlFor="playerFirst">First Name:</label>
-            <input 
-                type="text"
-                id="playerFirst" 
-                value={playerFirst} 
-                onChange={(e) => setPlayerFirst(e.target.value)}
+        <form className="playerForm" onSubmit={onSubmit}>
+            <div>
+                <label className="modalParameter" htmlFor="playerFirst">First Name:</label>
+                <input 
+                    type="text"
+                    id="playerFirst" 
+                    value={playerFirst} 
+                    onChange={(e) => setPlayerFirst(e.target.value)}
                 />
-        </div>
+            </div>
 
-        <div>
-            <label htmlFor="playerLast">Last Name:</label>
-            <input 
-                type="text"
-                id="playerLast" 
-                value={playerLast} 
-                onChange={(e) => setPlayerLast(e.target.value)}
+            <div>
+                <label className="modalParameter" htmlFor="playerLast">Last Name:</label>
+                <input 
+                    type="text"
+                    id="playerLast" 
+                    value={playerLast} 
+                    onChange={(e) => setPlayerLast(e.target.value)}
                 />
-        </div>
+            </div>
 
-        <div>
-            <label htmlFor="playerNumber">Player Number:</label>
-            <input 
-                type="text"
-                id="playerNumber" 
-                value={playerNumber} 
-                onChange={(e) => setPlayerNumber(e.target.value)}
+            <div>
+                <label className="modalParameter" htmlFor="playerNumber">Player Number:</label>
+                <input 
+                    type="text"
+                    id="playerNumber" 
+                    value={playerNumber} 
+                    onChange={(e) => setPlayerNumber(e.target.value)}
                 />
-        </div>
+            </div>
 
-        <div>
-            <label htmlFor="playerPosition">Position:</label>
-            <input 
-                type="text"
-                id="playerPosition" 
-                value={playerPosition} 
-                onChange={(e) => setPlayerPosition(e.target.value)}
-                />
-        </div>
+            <div>
+                <label className="modalParameter" htmlFor="playerPosition">Position:</label>
+                <select 
+                    id="playerPosition" 
+                    value={playerPosition} 
+                    onChange={(e) => setPlayerPosition(e.target.value)}
+                >
+                    <option value="">Select Position</option>
+                    <option value="S">S</option>
+                    <option value="OH">OH</option>
+                    <option value="MB">MB</option>
+                    <option value="L/DS">L/DS</option>
+                    <option value="OP">OP</option>
+                </select>
+            </div>
 
-        <button type="submit">{updating ? "Update" : "Create"}</button>
-    </form>
+            <button type="submit">{updating ? "Update" : "Create"}</button>
+        </form>
     );
 };
 
