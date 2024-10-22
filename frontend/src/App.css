@@ -217,3 +217,70 @@ button:hover, input:hover, select:hover {
   color: #f0f0f0;
   border: 1px solid #555;
 }
+
+.player-list-header {
+  background: none; /* Remove background color */
+  border: none;     /* Remove border */
+  color: #f0f0f0;   /* Keep text color light for contrast */
+  font-size: 1.1rem; /* Adjust the font size as needed */
+  font-weight: bold; /* Make the text bold */
+  cursor: pointer;   /* Keep the pointer cursor for button effect */
+}
+
+.player-list-header:hover {
+  color: #aaa; /* Optional: Lighter text color on hover */
+  text-decoration: underline; /* Optional: Underline text on hover for emphasis */
+}
+
+/* Styles for the Actions header button */
+.action-header {
+  cursor: default; /* Remove pointer cursor */
+  pointer-events: none; /* Make it unclickable */
+  background: none; /* Remove background */
+  border: none; /* Remove border */
+  color: #f0f0f0; /* Keep text color */
+}
+
+.action-header:hover {
+  text-decoration: none; /* Remove hover effect */
+  color: #f0f0f0; /* Ensure no color change on hover */
+}
+
+.player-list-header {
+  background: none; /* Remove background color */
+  border: none;     /* Remove border */
+  color: #f0f0f0;   /* Keep text color light for contrast */
+  font-size: 1.1rem; /* Adjust the font size as needed */
+  font-weight: bold; /* Make the text bold */
+  cursor: pointer;   /* Keep the pointer cursor for button effect */
+}
+
+.player-list-header:hover {
+  color: #aaa; /* Optional: Lighter text color on hover */
+  text-decoration: underline; /* Optional: Underline text on hover for emphasis */
+}
+
+/* Adjust the spacing for the arrow */
+.player-list-header::after {
+  margin-left: 5px;
+}
+
+.player-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+  margin-left: 20px;
+}
+
+.position-select-container {
+  margin-top: 10px;
+}
+
+.position-select-container select {
+  padding: 8px;
+  border-radius: 5px;
+  background-color: #333;
+  color: #f0f0f0;
+  border: 1px solid #555;
+}

@@ -76,3 +76,7 @@ th {
 input, button, label {
   margin-top: 10px;
 }
+
+.player-list-header {
+  background-color: None;
+}

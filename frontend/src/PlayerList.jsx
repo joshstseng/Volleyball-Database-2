@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 
 const PlayerList = ({ players, updatePlayer, updateCallback, handlePositionChange, selectedPosition, openCreateModal }) => {
+    const [sortField, setSortField] = useState(null); // track current sort field
+    const [sortOrder, setSortOrder] = useState(null); // track sort order: 'asc', 'desc', or 'none'
 
     const onDelete = async (playerId) => {
         try {
             const options = {
                 method: "DELETE"
-            }
-            const response = await fetch(`http://127.0.0.1:5000/delete_player/${playerId}`, options)
+            };
+            const response = await fetch(`http://127.0.0.1:5000/delete_player/${playerId}`, options);
             if (response.status === 200) {
                 updateCallback();
             } else {
@@ -16,7 +18,47 @@ const PlayerList = ({ players, updatePlayer, updateCallback, handlePositionChang
         } catch (error) {
             alert(error);
         }
-    }
+    };
+
+    const handleSort = (field) => {
+        if (sortField === field) {
+            // cycle through: ascending -> descending -> none
+            if (sortOrder === 'asc') {
+                setSortOrder('desc');
+            } else if (sortOrder === 'desc') {
+                setSortOrder(null);
+                setSortField(null); // Clear sorting
+            } else {
+                setSortOrder('asc');
+            }
+        } else {
+            // Set new field and start with ascending
+            setSortField(field);
+            setSortOrder('asc');
+        }
+    };
+
+    // Function to sort players array based on field and order
+    const sortedPlayers = [...players].sort((a, b) => {
+        if (!sortField || sortOrder === null) return 0; // no sorting
+        if (sortField === 'playerNumber') {
+            // Numeric comparison for playerNumber
+            return sortOrder === 'asc' ? a[sortField] - b[sortField] : b[sortField] - a[sortField];
+        } else {
+            // String comparison for other fields
+            return sortOrder === 'asc'
+                ? a[sortField].localeCompare(b[sortField])
+                : b[sortField].localeCompare(a[sortField]);
+        }
+    });
+
+    // Function to render the arrow based on sortOrder
+    const renderSortArrow = (field) => {
+        if (sortField !== field) return null; // no arrow if not the sorted field
+        if (sortOrder === 'asc') return " ↓";
+        if (sortOrder === 'desc') return " ↑";
+        return null;
+    };
 
     return (
         <div className="player-list-container">
@@ -25,15 +67,35 @@ const PlayerList = ({ players, updatePlayer, updateCallback, handlePositionChang
                 <table>
                     <thead>
                         <tr>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Number</th>
-                            <th>Position</th>
-                            <th>Actions</th>
+                            <th>
+                                <button className="player-list-header" onClick={() => handleSort("playerFirst")}>
+                                    First Name {renderSortArrow("playerFirst")}
+                                </button>
+                            </th>
+                            <th>
+                                <button className="player-list-header" onClick={() => handleSort("playerLast")}>
+                                    Last Name {renderSortArrow("playerLast")}
+                                </button>
+                            </th>
+                            <th>
+                                <button className="player-list-header" onClick={() => handleSort("playerNumber")}>
+                                    Number {renderSortArrow("playerNumber")}
+                                </button>
+                            </th>
+                            <th>
+                                <button className="player-list-header">
+                                    Position
+                                </button>
+                            </th>
+                            <th>
+                                <button className="player-list-header action-header" disabled>
+                                    Actions
+                                </button>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
-                        {players.map((player) => (
+                        {sortedPlayers.map((player) => (
                             <tr key={player.playerId}>
                                 <td>{player.playerFirst}</td>
                                 <td>{player.playerLast}</td>

@@ -80,7 +80,7 @@ function App() {
         updateCallback={onUpdate}
         handlePositionChange={handlePositionChange} 
         selectedPosition={selectedPosition}
-        openCreateModal={openCreateModal} // Pass down the function to trigger the modal
+        openCreateModal={openCreateModal} // pass down the function to trigger the modal
       />
     </>
   );

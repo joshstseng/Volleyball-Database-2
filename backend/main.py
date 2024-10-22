@@ -3,6 +3,7 @@ from config import app, db
 from models import Player, Team
 from sqlalchemy import text
 from sqlalchemy.orm import Session
+from sqlalchemy import select
 
 @app.route("/players", methods=["GET"])
 def get_players():
@@ -74,6 +75,7 @@ def delete_player(player_id):
     return jsonify({"message": "User deleted!"}), 200
 
 @app.route("/players_by_position", methods=["GET"])
+
 def get_players_by_position():
     position = request.args.get("position")
 
