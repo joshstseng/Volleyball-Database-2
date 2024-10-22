@@ -34,6 +34,7 @@ function App() {
       console.error("Error fetching players:", error);
       setPlayers([]);
     }
+    // console.log(players)
   };
 
   const handlePositionChange = (e) => {

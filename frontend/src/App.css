@@ -199,6 +199,17 @@ button:hover, input:hover, select:hover {
   margin-bottom: 20px; /* Space between button and dropdown */
 }
 
+/* Remove box around "Select Position" label */
+.position-select-container label {
+  background: none;
+  border: none;
+  padding: 0;
+  margin-bottom: 10px;
+  font-size: 1.1rem; /* Optional: Change font size for better distinction */
+  font-weight: bold; /* Optional: Make the label bold */
+  color: #f0f0f0;
+}
+
 .position-select-container select {
   padding: 8px;
   border-radius: 5px;

@@ -75,21 +75,16 @@ def delete_player(player_id):
 
 @app.route("/players_by_position", methods=["GET"])
 def get_players_by_position():
-    position = request.args.get("position")  # Get the 'position' from query parameters
-    
+    position = request.args.get("position")
+
     if position:
-        query = text("SELECT * FROM player WHERE player_position = :position")
-        
-        # Use a session to execute the query
-        with db.engine.connect() as connection:
-            result = connection.execute(query, {"position": position})
-            players = result.fetchall()
+        players = Player.query.filter_by(player_position=position).all()
     else:
+        # if no position is provided, return all players
         players = Player.query.all()
 
-    json_players = list(map(lambda x: x._asdict(), players))  # Convert to dictionary for JSON
+    json_players = list(map(lambda x: x.to_json(), players))
     return jsonify({"players": json_players})
-
 
 if __name__ == "__main__":
     with app.app_context():

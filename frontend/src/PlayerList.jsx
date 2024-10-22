@@ -52,7 +52,7 @@ const PlayerList = ({ players, updatePlayer, updateCallback, handlePositionChang
             <div className="player-controls">
                 <button onClick={openCreateModal}>Create New Player</button>
                 <div className="position-select-container">
-                    <label htmlFor="positionSelect">Select Position:</label>
+                    <label className="selectPositionTitle" htmlFor="positionSelect">Select Position:</label>
                     <select
                         id="positionSelect"
                         value={selectedPosition}
