@@ -75,7 +75,6 @@ def delete_player(player_id):
     return jsonify({"message": "User deleted!"}), 200
 
 @app.route("/players_by_position", methods=["GET"])
-
 def get_players_by_position():
     position = request.args.get("position")
 
@@ -87,6 +86,71 @@ def get_players_by_position():
 
     json_players = list(map(lambda x: x.to_json(), players))
     return jsonify({"players": json_players})
+
+# get
+@app.route("/teams", methods=["GET"])
+def get_teams():
+    teams = Team.query.all()
+    json_teams = list(map(lambda x: x.to_json(), teams))
+    return jsonify({"teams": json_teams})
+
+# create
+@app.route("/create_team", methods=["POST"])
+def create_team():
+    team_name = request.json.get("teamName")
+    num_win = request.json.get("numWin")
+    num_loss = request.json.get("numLoss")
+
+    if (not team_name):
+        return(
+            jsonify({"message": "You must include a team name"}), 400
+        )
+
+    new_team = Team(team_name, num_win, num_loss)
+
+    try:
+        db.session.ad(new_team)
+        db.session.commit()
+    except Exception as e:
+        return jsonify({"message": str(e)}), 400
+    
+    return jsonify({"message": "Team created!"}), 201
+
+# update
+@app.route("/update_team/<int:team_id>", methods=["PATCH"])
+def update_team(team_id):
+    team = Player.query.get(team_id)
+
+    if not team:
+        return jsonify({"message": "Team not found"}), 404
+
+    data = request.json
+
+    team.team_name = data.get("teamName", team.team_name)
+    team.num_win = data.get("numWin", team.num_win)
+    team.num_loss = data.get("numLoss", team.num_loss)
+
+    if (not team.team_name):
+        return(
+            jsonify({"message": "You must include a team name"}), 400
+        )
+    
+    db.session.commit()
+    return jsonify({"message": "Team updated."}), 200
+
+
+# delete
+@app.route("/delete_team/<int:team_id>", methods=["DELETE"])
+def delete_team(team_id):
+    team = Team.query.get(team_id)
+    
+    if not team:
+        return jsonify({"message": "Team not found"}), 404
+    
+    db.session.delete(team)
+    db.session.commit()
+
+    return jsonify({"message": "Team deleted!"}), 200
 
 if __name__ == "__main__":
     with app.app_context():

@@ -5,7 +5,6 @@ class Team(db.Model):
     team_name = db.Column(db.String(50), unique=False, nullable=False)
     num_win = db.Column(db.Integer)
     num_loss = db.Column(db.Integer)
-    # matches?
 
     def to_json(self):
         return {
