@@ -4,7 +4,7 @@
 
 **team**(<ins>*team_id*</ins>, team_name, numWin, numLoss)
 
-**player**(<ins>*player_id*</ins>, player_first, player_last, team_id, player_number, player_dob)
+**player**(<ins>*player_id*</ins>, player_first, player_last, team_id, player_number)
 
 **coach**(<ins>*coach_id*</ins>, coach_first, coach_last, team_id)
 
