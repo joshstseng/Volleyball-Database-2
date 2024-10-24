@@ -19,6 +19,7 @@ const PlayerForm = ({ existingPlayer = {}, updateCallback}) => {
             playerPosition
         }
         const url = "http://127.0.0.1:5000/" + (updating ? `update_player/${existingPlayer.playerId}` : "create_player")
+
         const options = {
             method: updating ? "PATCH" : "POST",
             headers: {
@@ -26,6 +27,8 @@ const PlayerForm = ({ existingPlayer = {}, updateCallback}) => {
             },
             body: JSON.stringify(data)
         }
+        console.log(url)
+        console.log("options", options)
         const response = await fetch(url, options)
 
         if (response.status !== 201 && response.status !== 200) {

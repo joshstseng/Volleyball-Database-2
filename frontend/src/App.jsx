@@ -1,19 +1,24 @@
 import { useState, useEffect } from 'react';
 import PlayerList from './PlayerList';
-import TeamList from './TeamList';
+// import TeamList from './TeamList';
 import PlayerForm from './PlayerForm';
-import TeamForm from './TeamForm';
+// import TeamForm from './TeamForm';
 import './App.css';
 
 function App() {
   const [activeTab, setActiveTab] = useState("Players");
   const [players, setPlayers] = useState([]);
   const [teams, setTeams] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentEntity, setCurrentEntity] = useState({});
+  
+  // Modal state for Players
+  const [isPlayerModalOpen, setIsPlayerModalOpen] = useState(false);
+  const [currentPlayer, setCurrentPlayer] = useState({});
   const [selectedPosition, setSelectedPosition] = useState("");
-  const [isTeam, setIsTeam] = useState(false);
-
+  
+  // Modal state for Teams
+  const [isTeamModalOpen, setIsTeamModalOpen] = useState(false);
+  const [currentTeam, setCurrentTeam] = useState({});
+  
   useEffect(() => {
     if (activeTab === "Players") {
       fetchPlayers();
@@ -23,9 +28,9 @@ function App() {
   }, [selectedPosition, activeTab]);
 
   const fetchPlayers = async () => {
-    let endpoint = selectedPosition
-      ? `http://127.0.0.1:5000/players_by_position?position=${selectedPosition}`
-      : "http://127.0.0.1:5000/players";
+    let endpoint = selectedPosition ?
+      `http://127.0.0.1:5000/players_by_position?position=${selectedPosition}` :
+      "http://127.0.0.1:5000/players"; // Use /players if no position is selected    
 
     try {
       const response = await fetch(endpoint);
@@ -33,6 +38,7 @@ function App() {
         const data = await response.json();
         setPlayers(data.players);
       } else {
+        console.error("Failed to fetch players");
         setPlayers([]);
       }
     } catch (error) {
@@ -48,6 +54,7 @@ function App() {
         const data = await response.json();
         setTeams(data.teams);
       } else {
+        console.error("Failed to fetch teams");
         setTeams([]);
       }
     } catch (error) {
@@ -56,36 +63,48 @@ function App() {
     }
   };
 
+  // Modal Handling for Players
+  const closePlayerModal = () => {
+    setIsPlayerModalOpen(false);
+    setCurrentPlayer({});
+  };
+
+  const openCreatePlayerModal = () => {
+    setIsPlayerModalOpen(true);
+  };
+
+  const openEditPlayerModal = (player) => {
+    setCurrentPlayer(player);
+    setIsPlayerModalOpen(true);
+  };
+
+  // Modal Handling for Teams
+  const closeTeamModal = () => {
+    setIsTeamModalOpen(false);
+    setCurrentTeam({});
+  };
+
+  const openCreateTeamModal = () => {
+    setIsTeamModalOpen(true);
+  };
+
+  const openEditTeamModal = (team) => {
+    setCurrentTeam(team);
+    setIsTeamModalOpen(true);
+  };
+
+  const onUpdatePlayers = () => {
+    closePlayerModal();
+    fetchPlayers();
+  };
+
+  const onUpdateTeams = () => {
+    closeTeamModal();
+    fetchTeams();
+  };
+
   const handlePositionChange = (e) => {
     setSelectedPosition(e.target.value);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setCurrentEntity({});
-  };
-
-  const openCreateModal = (isTeam = false) => {
-    if (!isModalOpen) {
-      setIsTeam(isTeam);
-      setIsModalOpen(true);
-    }
-  };
-
-  const openEditModal = (entity, isTeam = false) => {
-    if (isModalOpen) return;
-    setIsTeam(isTeam);
-    setCurrentEntity(entity);
-    setIsModalOpen(true);
-  };
-
-  const onUpdate = () => {
-    closeModal();
-    if (isTeam) {
-      fetchTeams();
-    } else {
-      fetchPlayers();
-    }
   };
 
   const renderContent = () => {
@@ -93,47 +112,47 @@ function App() {
       case "Players":
         return (
           <>
-            {isModalOpen && (
+            {isPlayerModalOpen && (
               <div className="modal">
                 <div className="modal-content">
-                  <span className="close" onClick={closeModal}>&times;</span>
-                  <PlayerForm existingPlayer={currentEntity} updateCallback={onUpdate} />
+                  <span className="close" onClick={closePlayerModal}>&times;</span>
+                  <PlayerForm existingPlayer={currentPlayer} updateCallback={onUpdatePlayers} />
                 </div>
               </div>
             )}
             <PlayerList
               players={players}
-              updatePlayer={(player) => openEditModal(player, false)}
-              updateCallback={onUpdate}
+              updatePlayer={openEditPlayerModal}
+              updateCallback={onUpdatePlayers}
               handlePositionChange={handlePositionChange}
               selectedPosition={selectedPosition}
-              openCreateModal={() => openCreateModal(false)}
+              openCreateModal={openCreatePlayerModal} // pass down the function to trigger the player modal
             />
           </>
         );
       case "Teams":
-        return (
-          <>
-            {isModalOpen && (
-              <div className="modal">
-                <div className="modal-content">
-                  <span className="close" onClick={closeModal}>&times;</span>
-                  <TeamForm existingTeam={currentEntity} updateCallback={onUpdate} />
-                </div>
-              </div>
-            )}
-            <TeamList
-              teams={teams}
-              updateTeam={(team) => openEditModal(team, true)}
-              updateCallback={onUpdate}
-              openCreateTeamModal={() => openCreateModal(true)}
-            />
-          </>
+        return (<h2>lsdkfj</h2>
+          // <>
+          //   {isTeamModalOpen && (
+          //     <div className="modal">
+          //       <div className="modal-content">
+          //         <span className="close" onClick={closeTeamModal}>&times;</span>
+          //         <TeamForm existingTeam={currentTeam} updateCallback={onUpdateTeams} />
+          //       </div>
+          //     </div>
+          //   )}
+          //   <TeamList
+          //     teams={teams}
+          //     updateTeam={openEditTeamModal}
+          //     updateCallback={onUpdateTeams}
+          //     openCreateTeamModal={openCreateTeamModal} // pass down the function to trigger the team modal
+          //   />
+          // </>
         );
       case "Staff":
-        return <h2>Staff Page</h2>; // Placeholder for Staff page
+        return <h2>Staff Page</h2>;
       case "Matches":
-        return <h2>Matches Page</h2>; // Placeholder for Matches page
+        return <h2>Matches Page</h2>;
       default:
         return null;
     }
