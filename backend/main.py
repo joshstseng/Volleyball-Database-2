@@ -106,10 +106,10 @@ def create_team():
             jsonify({"message": "You must include a team name"}), 400
         )
 
-    new_team = Team(team_name, num_win, num_loss)
+    new_team = Team(team_name=team_name, num_win=num_win, num_loss=num_loss)
 
     try:
-        db.session.ad(new_team)
+        db.session.add(new_team)
         db.session.commit()
     except Exception as e:
         return jsonify({"message": str(e)}), 400
@@ -119,7 +119,7 @@ def create_team():
 # update
 @app.route("/update_team/<int:team_id>", methods=["PATCH"])
 def update_team(team_id):
-    team = Player.query.get(team_id)
+    team = Team.query.get(team_id)
 
     if not team:
         return jsonify({"message": "Team not found"}), 404

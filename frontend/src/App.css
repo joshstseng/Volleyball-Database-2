@@ -21,7 +21,7 @@ body {
 
 .modal-content {
   background-color: #2a2a2a; /* Darker modal content */
-  margin: 10% auto;
+  margin: 5% auto;
   padding: 30px;
   border: 1px solid #444;
   width: 40%;
@@ -176,11 +176,13 @@ button:hover, input:hover, select:hover {
 }
 
 /* Flexbox layout for table and controls */
-.player-list-container {
+.player-list-container, .team-list-container {
   display: flex;
   justify-content: space-between; /* Align controls on the side */
   align-items: flex-start;
-  margin: 20px 0;
+  margin: 0, auto;
+  width: 100%;
+  max-width: 900px;
 }
 
 .table-container {
@@ -218,7 +220,7 @@ button:hover, input:hover, select:hover {
   border: 1px solid #555;
 }
 
-.player-list-header {
+.player-list-header, .team-list-header {
   background: none; /* Remove background color */
   border: none;     /* Remove border */
   color: #f0f0f0;   /* Keep text color light for contrast */
@@ -227,7 +229,7 @@ button:hover, input:hover, select:hover {
   cursor: pointer;   /* Keep the pointer cursor for button effect */
 }
 
-.player-list-header:hover {
+.player-list-header:hover, .team-list-header:hover {
   color: #aaa; /* Optional: Lighter text color on hover */
   text-decoration: underline; /* Optional: Underline text on hover for emphasis */
 }
@@ -246,7 +248,7 @@ button:hover, input:hover, select:hover {
   color: #f0f0f0; /* Ensure no color change on hover */
 }
 
-.player-list-header {
+.player-list-header, .team-list-header {
   background: none; /* Remove background color */
   border: none;     /* Remove border */
   color: #f0f0f0;   /* Keep text color light for contrast */
@@ -255,17 +257,17 @@ button:hover, input:hover, select:hover {
   cursor: pointer;   /* Keep the pointer cursor for button effect */
 }
 
-.player-list-header:hover {
+.player-list-header:hover, .team-list-header:hover {
   color: #aaa; /* Optional: Lighter text color on hover */
   text-decoration: underline; /* Optional: Underline text on hover for emphasis */
 }
 
 /* Adjust the spacing for the arrow */
-.player-list-header::after {
+.player-list-header::after, .team-list-header::after {
   margin-left: 5px;
 }
 
-.player-controls {
+.player-controls, .team-controls {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -283,4 +285,42 @@ button:hover, input:hover, select:hover {
   background-color: #333;
   color: #f0f0f0;
   border: 1px solid #555;
+}
+
+.sticky-header {
+  position: sticky;
+  top: 0;
+  background-color: #333;
+  color: white;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  z-index: 1000;
+}
+
+.sticky-header button {
+  background-color: #444;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.sticky-header button:hover {
+  background-color: #555;
+}
+
+.content-container {
+  display: flex;
+  justify-content: center; /* Horizontally center the content */
+  align-items: center; /* Vertically center the content */
+  min-height: 80vh; /* Ensure the content takes up at least 80% of the viewport height */
+  padding: 20px;
+}
+
+.page-wrapper {
+  justify-content: center;
+  align-items: center;
 }
