@@ -6,6 +6,10 @@
 
 **player**(<ins>*player_id*</ins>, player_first, player_last, team_id, player_number, player_dob)
 
+**coach**(<ins>*coach_id*</ins>, coach_first, coach_last, team_id)
+
+**match**(<ins>*match_id*</ins>, winning_team_id, losing_team_id)
+
 ## How to use:
 
 Note: Python and Node are required to run the app.
