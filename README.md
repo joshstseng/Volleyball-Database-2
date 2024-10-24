@@ -2,7 +2,7 @@
 
 ## Database Design:
 
-**team**(*team_id*, team_name, numWin, numLoss)
+**team**(<ins>*team_id*</ins>, team_name, numWin, numLoss)
 
 **players**(*player_id*, player_first, player_last, team_id, player_number, player_dob)
 
