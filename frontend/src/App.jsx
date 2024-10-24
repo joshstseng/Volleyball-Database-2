@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import PlayerList from './PlayerList';
-// import TeamList from './TeamList';
+import TeamList from './TeamList';
 import PlayerForm from './PlayerForm';
-// import TeamForm from './TeamForm';
+import TeamForm from './TeamForm';
 import './App.css';
 
 function App() {
@@ -131,23 +131,23 @@ function App() {
           </>
         );
       case "Teams":
-        return (<h2>lsdkfj</h2>
-          // <>
-          //   {isTeamModalOpen && (
-          //     <div className="modal">
-          //       <div className="modal-content">
-          //         <span className="close" onClick={closeTeamModal}>&times;</span>
-          //         <TeamForm existingTeam={currentTeam} updateCallback={onUpdateTeams} />
-          //       </div>
-          //     </div>
-          //   )}
-          //   <TeamList
-          //     teams={teams}
-          //     updateTeam={openEditTeamModal}
-          //     updateCallback={onUpdateTeams}
-          //     openCreateTeamModal={openCreateTeamModal} // pass down the function to trigger the team modal
-          //   />
-          // </>
+        return (
+          <>
+            {isTeamModalOpen && (
+              <div className="modal">
+                <div className="modal-content">
+                  <span className="close" onClick={closeTeamModal}>&times;</span>
+                  <TeamForm existingTeam={currentTeam} updateCallback={onUpdateTeams} />
+                </div>
+              </div>
+            )}
+            <TeamList
+              teams={teams}
+              updateTeam={openEditTeamModal}
+              updateCallback={onUpdateTeams}
+              openCreateTeamModal={openCreateTeamModal} // pass down the function to trigger the team modal
+            />
+          </>
         );
       case "Staff":
         return <h2>Staff Page</h2>;
