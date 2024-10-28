@@ -36,6 +36,18 @@ const PlayerList = ({ players, updatePlayer, updateCallback, handlePositionChang
         }
     };
 
+    const getTeamByID = (team_id) => {
+
+        for (const team of teams) {
+            
+            if (parseInt(team.teamId) === parseInt(team_id)) {
+                return team.teamName; // Return the team name if found
+            }
+        }
+        return "Unknown"; // Default value if no match is found
+    };
+    
+
     const sortedPlayers = [...players].sort((a, b) => {
         if (!sortField || sortOrder === null) return 0;
         if (sortField === 'playerNumber') {
@@ -100,7 +112,7 @@ const PlayerList = ({ players, updatePlayer, updateCallback, handlePositionChang
                                 <td>{player.playerLast}</td>
                                 <td>{player.playerNumber}</td>
                                 <td>{player.playerPosition}</td>
-                                <td>{player.teamId}</td>
+                                <td>{getTeamByID(player.teamId)}</td>
                                 <td>
                                     <button onClick={() => updatePlayer(player)}>Update</button>
                                     <button onClick={() => onDelete(player.playerId)}>Delete</button>
