@@ -263,9 +263,9 @@ def update_staff(staff_id):
     staff.title = data.get("title", staff.title)
 
     if (not staff.staff_first or not staff.staff_last):
-        return (jsonify({"message": "You must uinclude a first name and last name"}), 400)
+        return (jsonify({"message": "You must include a first name and last name"}), 400)
     
-    db.session.comit()
+    db.session.commit()
 
     return jsonify({"message": "Staff updated."}), 200
 
@@ -279,7 +279,7 @@ def delete_staff(staff_id):
     db.session.delete(staff)
     db.session.commit()
 
-    return jsonify({"message": "Staff deleted!"}), 404
+    return jsonify({"message": "Staff deleted!"}), 200
 
 if __name__ == "__main__":
     with app.app_context():
