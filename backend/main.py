@@ -1,6 +1,6 @@
 from flask import request, jsonify
 from config import app, db
-from models import Player, Team
+from models import Player, Team, Staff
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 from sqlalchemy import select
@@ -23,12 +23,11 @@ def create_player():
         return(
             jsonify({"message": "You must include a first name and last name"}), 400
         )
-    new_player = Player(
-                         player_first=player_first,
-                         player_last=player_last,
-                         team_id=team_id,
-                         player_number=player_number,
-                         player_position=player_position)
+    new_player = Player(player_first=player_first,
+                        player_last=player_last,
+                        team_id=team_id,
+                        player_number=player_number,
+                        player_position=player_position)
 
     try:
         db.session.add(new_player)
@@ -43,7 +42,7 @@ def update_player(player_id):
     player = Player.query.get(player_id)
 
     if not player:
-        return jsonify({"message": "User not found"}), 404
+        return jsonify({"message": "Player not found"}), 404
     
     data = request.json
     
@@ -67,12 +66,12 @@ def delete_player(player_id):
     player = Player.query.get(player_id)
 
     if not player:
-        return jsonify({"message": "User not found"}), 404
+        return jsonify({"message": "Player not found"}), 404
 
     db.session.delete(player)
     db.session.commit()
 
-    return jsonify({"message": "User deleted!"}), 200
+    return jsonify({"message": "Player deleted!"}), 200
 
 @app.route("/players_by_position", methods=["GET"])
 def get_players_by_position():
@@ -218,8 +217,76 @@ def get_filtered_players():
 
     return jsonify({"players": players})
 
+@app.route("/staff", methods=["GET"])
+def get_staff():
+    staff = Staff.query.all()
+    json_staff = list(map(lambda x: x.to_json(), staff))
+    return jsonify({"staff": json_staff})
+
+@app.route("/create_staff", methods=["POST"])
+def create_staff():
+    staff_first = request.json.get("staffFirst")
+    staff_last = request.json.get("staffLast")
+    team_id = request.json.get("teamId")
+    title = request.json.get("title")
+
+    if (not staff_first or not staff_last):
+        return (
+            jsonify({"message": "You must include a first name and last name"}), 400
+        )
+
+    new_staff = Staff(staff_first=staff_first,
+                      staff_last=staff_last,
+                      team_id=team_id,
+                      title=title)
+    
+    try:
+        db.session.add(new_staff)
+        db.session.commit()
+    except Exception as e:
+        return jsonify({"message": str(e)}), 400
+    
+    return jsonify({"message": "Staff created!"}), 201
+
+@app.route("/update_staff/<int:staff_id>", methods=["PATCH"])
+def update_staff(staff_id):
+    staff = Staff.query.get(staff_id)
+
+    if not staff:
+        return jsonify({"message": "Staff not found"}), 404
+    
+    data = request.json
+
+    staff.staff_first = data.get("staffFirst", staff.staff_first)
+    staff.staff_last = data.get("staffLast", staff.staff_last)
+    staff.team_id = data.get("teamId", staff.team_id)
+    staff.title = data.get("title", staff.title)
+
+    if (not staff.staff_first or not staff.staff_last):
+        return (jsonify({"message": "You must uinclude a first name and last name"}), 400)
+    
+    db.session.comit()
+
+    return jsonify({"message": "Staff updated."}), 200
+
+@app.route("/delete_staff/<int:staff_id>", methods=["DELETE"])
+def delete_staff(staff_id):
+    staff = Staff.query.get(staff_id)
+
+    if not staff:
+        return jsonify({"message": "Staff not found"}), 404
+    
+    db.session.delete(staff)
+    db.session.commit()
+
+    return jsonify({"message": "Staff deleted!"}), 404
+
 if __name__ == "__main__":
     with app.app_context():
         # creates if db doesn't exist
         db.create_all()
     app.run(debug=True)
+
+
+
+

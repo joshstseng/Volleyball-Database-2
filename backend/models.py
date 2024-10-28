@@ -18,7 +18,7 @@ class Player(db.Model):
     player_id = db.Column(db.Integer, primary_key=True)
     player_first = db.Column(db.String(50), unique=False, nullable=False)
     player_last = db.Column(db.String(50), unique=False, nullable=False)
-    team_id = db.Column(db.String(50), unique=False)
+    team_id = db.Column(db.Integer, unique=False)
     player_number = db.Column(db.Integer, unique=False)
     player_position = db.Column(db.String(3), unique=False)
     
@@ -30,4 +30,20 @@ class Player(db.Model):
             "teamId": self.team_id,
             "playerNumber": self.player_number,
             "playerPosition": self.player_position
+        }
+    
+class Staff(db.Model):
+    staff_id = db.Column(db.Integer, primary_key=True)
+    staff_first = db.Column(db.String(50), unique=False, nullable=False)
+    staff_last = db.Column(db.String(50), unique=False, nullable=False)
+    team_id = db.Column(db.Integer, unique=False)
+    title = db.Column(db.String(50), unique=False)
+
+    def to_json(self):
+        return {
+            "staffID": self.staff_id,
+            "staffFirst": self.staff_first,
+            "staffLast": self.staff_last,
+            "teamId": self.team_id,
+            "title": self.title
         }
