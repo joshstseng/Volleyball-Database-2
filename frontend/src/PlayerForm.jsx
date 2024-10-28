@@ -1,91 +1,109 @@
-import { useState } from "react"
+import { useState } from "react";
 
-const PlayerForm = ({ existingPlayer = {}, updateCallback}) => {
+const PlayerForm = ({ existingPlayer = {}, updateCallback, teams = [] }) => {
+    const [playerFirst, setPlayerFirst] = useState(existingPlayer.playerFirst || "");
+    const [playerLast, setPlayerLast] = useState(existingPlayer.playerLast || "");
+    const [playerNumber, setPlayerNumber] = useState(existingPlayer.playerNumber || "");
+    const [playerPosition, setPlayerPosition] = useState(existingPlayer.playerPosition || "");
+    const [teamId, setTeamId] = useState(existingPlayer.teamId || ""); // Store the teamId
 
-    const [playerFirst, setPlayerFirst] = useState(existingPlayer.playerFirst || "")
-    const [playerLast, setPlayerLast] = useState(existingPlayer.playerLast || "")
-    const [playerNumber, setPlayerNumber] = useState(existingPlayer.playerNumber || "")
-    const [playerPosition, setPlayerPosition] = useState(existingPlayer.playerPosition || "")
-
-    const updating = Object.entries(existingPlayer).length !== 0
+    const updating = Object.entries(existingPlayer).length !== 0;
 
     const onSubmit = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
         const data = {
             playerFirst,
             playerLast,
             playerNumber,
-            playerPosition
-        }
-        const url = "http://127.0.0.1:5000/" + (updating ? `update_player/${existingPlayer.playerId}` : "create_player")
+            playerPosition,
+            teamId, // Ensure teamId is sent to the backend
+        };
 
+        const url = "http://127.0.0.1:5000/" + (updating ? `update_player/${existingPlayer.playerId}` : "create_player");
         const options = {
             method: updating ? "PATCH" : "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             },
-            body: JSON.stringify(data)
-        }
-        console.log(url)
-        console.log("options", options)
-        const response = await fetch(url, options)
+            body: JSON.stringify(data),
+        };
+        const response = await fetch(url, options);
 
         if (response.status !== 201 && response.status !== 200) {
-            // fail
-            const data = await response.json()
-            alert(data.message)
+            const data = await response.json();
+            alert(data.message);
         } else {
-            // success
-            updateCallback()
+            updateCallback();
         }
-    }
+    };
 
     return (
         <form className="playerForm" onSubmit={onSubmit}>
             <div>
                 <label className="modalParameter" htmlFor="playerFirst">First Name:</label>
-                <input 
+                <input
                     type="text"
-                    id="playerFirst" 
-                    value={playerFirst} 
+                    id="playerFirst"
+                    value={playerFirst}
                     onChange={(e) => setPlayerFirst(e.target.value)}
+                    required
                 />
             </div>
 
             <div>
                 <label className="modalParameter" htmlFor="playerLast">Last Name:</label>
-                <input 
+                <input
                     type="text"
-                    id="playerLast" 
-                    value={playerLast} 
+                    id="playerLast"
+                    value={playerLast}
                     onChange={(e) => setPlayerLast(e.target.value)}
+                    required
                 />
             </div>
 
             <div>
                 <label className="modalParameter" htmlFor="playerNumber">Player Number:</label>
-                <input 
+                <input
                     type="text"
-                    id="playerNumber" 
-                    value={playerNumber} 
+                    id="playerNumber"
+                    value={playerNumber}
                     onChange={(e) => setPlayerNumber(e.target.value)}
+                    required
                 />
             </div>
 
             <div>
                 <label className="modalParameter" htmlFor="playerPosition">Position:</label>
-                <select 
-                    id="playerPosition" 
-                    value={playerPosition} 
+                <select
+                    id="playerPosition"
+                    value={playerPosition}
                     onChange={(e) => setPlayerPosition(e.target.value)}
+                    required
                 >
                     <option value="">Select Position</option>
-                    <option value="S">S</option>
-                    <option value="OH">OH</option>
-                    <option value="MB">MB</option>
-                    <option value="L/DS">L/DS</option>
-                    <option value="OP">OP</option>
+                    <option value="S">Setter</option>
+                    <option value="OH">Outside Hitter</option>
+                    <option value="MB">Middle Blocker</option>
+                    <option value="L/DS">Libero/DS</option>
+                    <option value="OP">Opposite Hitter</option>
+                </select>
+            </div>
+
+            <div>
+                <label className="modalParameter" htmlFor="teamId">Team:</label>
+                <select
+                    id="teamId"
+                    value={teamId}
+                    onChange={(e) => setTeamId(e.target.value)}
+                    required
+                >
+                    <option value="">Select Team</option>
+                    {teams.map((team) => (
+                        <option key={team.teamId} value={team.teamId}>
+                            {team.teamName}
+                        </option>
+                    ))}
                 </select>
             </div>
 
@@ -94,4 +112,4 @@ const PlayerForm = ({ existingPlayer = {}, updateCallback}) => {
     );
 };
 
-export default PlayerForm
+export default PlayerForm;

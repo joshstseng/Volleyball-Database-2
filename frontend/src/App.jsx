@@ -9,19 +9,20 @@ function App() {
   const [activeTab, setActiveTab] = useState("Players");
   const [players, setPlayers] = useState([]);
   const [teams, setTeams] = useState([]);
-  
+
   // Modal state for Players
   const [isPlayerModalOpen, setIsPlayerModalOpen] = useState(false);
   const [currentPlayer, setCurrentPlayer] = useState({});
   const [selectedPosition, setSelectedPosition] = useState("");
-  
+
   // Modal state for Teams
   const [isTeamModalOpen, setIsTeamModalOpen] = useState(false);
   const [currentTeam, setCurrentTeam] = useState({});
-  
+
   useEffect(() => {
     if (activeTab === "Players") {
       fetchPlayers();
+      fetchTeams(); // Fetch teams so that team names can be shown in PlayerForm
     } else if (activeTab === "Teams") {
       fetchTeams();
     }
@@ -30,7 +31,7 @@ function App() {
   const fetchPlayers = async () => {
     let endpoint = selectedPosition ?
       `http://127.0.0.1:5000/players_by_position?position=${selectedPosition}` :
-      "http://127.0.0.1:5000/players"; // Use /players if no position is selected    
+      "http://127.0.0.1:5000/players";
 
     try {
       const response = await fetch(endpoint);
@@ -70,6 +71,7 @@ function App() {
   };
 
   const openCreatePlayerModal = () => {
+    setCurrentPlayer({});
     setIsPlayerModalOpen(true);
   };
 
@@ -85,6 +87,7 @@ function App() {
   };
 
   const openCreateTeamModal = () => {
+    setCurrentTeam({});
     setIsTeamModalOpen(true);
   };
 
@@ -116,17 +119,18 @@ function App() {
               <div className="modal">
                 <div className="modal-content">
                   <span className="close" onClick={closePlayerModal}>&times;</span>
-                  <PlayerForm existingPlayer={currentPlayer} updateCallback={onUpdatePlayers} />
+                  <PlayerForm existingPlayer={currentPlayer} updateCallback={onUpdatePlayers} teams={teams} />
                 </div>
               </div>
             )}
             <PlayerList
               players={players}
+              teams={teams}
               updatePlayer={openEditPlayerModal}
               updateCallback={onUpdatePlayers}
               handlePositionChange={handlePositionChange}
               selectedPosition={selectedPosition}
-              openCreateModal={openCreatePlayerModal} // pass down the function to trigger the player modal
+              openCreateModal={openCreatePlayerModal}
             />
           </>
         );
@@ -145,7 +149,7 @@ function App() {
               teams={teams}
               updateTeam={openEditTeamModal}
               updateCallback={onUpdateTeams}
-              openCreateTeamModal={openCreateTeamModal} // pass down the function to trigger the team modal
+              openCreateTeamModal={openCreateTeamModal}
             />
           </>
         );

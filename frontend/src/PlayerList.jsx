@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
-const PlayerList = ({ players, updatePlayer, updateCallback, handlePositionChange, selectedPosition, openCreateModal }) => {
-    const [sortField, setSortField] = useState(null); // track current sort field
-    const [sortOrder, setSortOrder] = useState(null); // track sort order: 'asc', 'desc', or 'none'
+const PlayerList = ({ players, updatePlayer, updateCallback, handlePositionChange, selectedPosition, openCreateModal, teams }) => {
+    const [sortField, setSortField] = useState(null);
+    const [sortOrder, setSortOrder] = useState(null);
 
     const onDelete = async (playerId) => {
         try {
@@ -22,39 +22,33 @@ const PlayerList = ({ players, updatePlayer, updateCallback, handlePositionChang
 
     const handleSort = (field) => {
         if (sortField === field) {
-            // cycle through: ascending -> descending -> none
             if (sortOrder === 'asc') {
                 setSortOrder('desc');
             } else if (sortOrder === 'desc') {
                 setSortOrder(null);
-                setSortField(null); // Clear sorting
+                setSortField(null);
             } else {
                 setSortOrder('asc');
             }
         } else {
-            // Set new field and start with ascending
             setSortField(field);
             setSortOrder('asc');
         }
     };
 
-    // Function to sort players array based on field and order
     const sortedPlayers = [...players].sort((a, b) => {
-        if (!sortField || sortOrder === null) return 0; // no sorting
+        if (!sortField || sortOrder === null) return 0;
         if (sortField === 'playerNumber') {
-            // Numeric comparison for playerNumber
             return sortOrder === 'asc' ? a[sortField] - b[sortField] : b[sortField] - a[sortField];
         } else {
-            // String comparison for other fields
             return sortOrder === 'asc'
                 ? a[sortField].localeCompare(b[sortField])
                 : b[sortField].localeCompare(a[sortField]);
         }
     });
 
-    // Function to render the arrow based on sortOrder
     const renderSortArrow = (field) => {
-        if (sortField !== field) return null; // no arrow if not the sorted field
+        if (sortField !== field) return null;
         if (sortOrder === 'asc') return " ↓";
         if (sortOrder === 'desc') return " ↑";
         return null;
@@ -88,6 +82,11 @@ const PlayerList = ({ players, updatePlayer, updateCallback, handlePositionChang
                                 </button>
                             </th>
                             <th>
+                                <button className="player-list-header">
+                                    Team
+                                </button>
+                            </th>
+                            <th>
                                 <button className="player-list-header action-header" disabled>
                                     Actions
                                 </button>
@@ -101,6 +100,7 @@ const PlayerList = ({ players, updatePlayer, updateCallback, handlePositionChang
                                 <td>{player.playerLast}</td>
                                 <td>{player.playerNumber}</td>
                                 <td>{player.playerPosition}</td>
+                                <td>{player.teamId}</td>
                                 <td>
                                     <button onClick={() => updatePlayer(player)}>Update</button>
                                     <button onClick={() => onDelete(player.playerId)}>Delete</button>
