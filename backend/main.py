@@ -165,24 +165,58 @@ def delete_team(team_id):
 
     return jsonify({"message": "Team deleted!"}), 200
 
+# @app.route("/players_filtered", methods=["GET"])
+# def get_players_filtered():
+#     position = request.args.get("position")
+#     team_id = request.args.get("teamId")
+
+#     # Start with the base query
+#     query = Player.query
+
+#     # Apply filters if the parameters are provided
+#     if position:
+#         query = query.filter_by(player_position=position)
+#     if team_id:
+#         query = query.filter_by(team_id=team_id)
+
+#     players = query.all()
+#     json_players = list(map(lambda x: x.to_json(), players))
+#     return jsonify({"players": json_players})
+
 @app.route("/players_filtered", methods=["GET"])
-def get_players_filtered():
+def get_filtered_players():
     position = request.args.get("position")
     team_id = request.args.get("teamId")
+    
+    query = "SELECT * FROM player"
+    params = {}
 
-    # Start with the base query
-    query = Player.query
-
-    # Apply filters if the parameters are provided
+    # add filters if provided
     if position:
-        query = query.filter_by(player_position=position)
+        query += " WHERE player_position = :position"
+        params['position'] = position
+    else:
+        query += " WHERE 1=1"
     if team_id:
-        query = query.filter_by(team_id=team_id)
+        query += " AND team_id = :team_id"
+        params['team_id'] = team_id
 
-    players = query.all()
-    json_players = list(map(lambda x: x.to_json(), players))
-    return jsonify({"players": json_players})
+    result = db.session.execute(text(query), params).mappings()
+    
+    # map database columns to keys
+    players = [
+        {
+            "playerId": row["player_id"],
+            "playerFirst": row["player_first"],
+            "playerLast": row["player_last"],
+            "teamId": row["team_id"],
+            "playerNumber": row["player_number"],
+            "playerPosition": row["player_position"]
+        }
+        for row in result
+    ]
 
+    return jsonify({"players": players})
 
 if __name__ == "__main__":
     with app.app_context():
