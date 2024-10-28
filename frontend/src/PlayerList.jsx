@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const PlayerList = ({ players, updatePlayer, updateCallback, handlePositionChange, selectedPosition, openCreateModal, teams }) => {
+const PlayerList = ({ players, updatePlayer, updateCallback, handlePositionChange, selectedPosition, handleTeamChange, selectedTeamId, openCreateModal, teams }) => {
     const [sortField, setSortField] = useState(null);
     const [sortOrder, setSortOrder] = useState(null);
 
@@ -37,16 +37,13 @@ const PlayerList = ({ players, updatePlayer, updateCallback, handlePositionChang
     };
 
     const getTeamByID = (team_id) => {
-
         for (const team of teams) {
-            
             if (parseInt(team.teamId) === parseInt(team_id)) {
-                return team.teamName; // Return the team name if found
+                return team.teamName;
             }
         }
-        return "Unknown"; // Default value if no match is found
+        return "Unknown";
     };
-    
 
     const sortedPlayers = [...players].sort((a, b) => {
         if (!sortField || sortOrder === null) return 0;
@@ -89,20 +86,16 @@ const PlayerList = ({ players, updatePlayer, updateCallback, handlePositionChang
                                 </button>
                             </th>
                             <th>
-                                <button className="player-list-header">
-                                    Position
+                                <button className="player-list-header" onClick={() => handleSort("playerPosition")}>
+                                    Position {renderSortArrow("playerPosition")}
                                 </button>
                             </th>
                             <th>
-                                <button className="player-list-header">
-                                    Team
+                                <button className="player-list-header" onClick={() => handleSort("teamId")}>
+                                    Team {renderSortArrow("teamId")}
                                 </button>
                             </th>
-                            <th>
-                                <button className="player-list-header action-header" disabled>
-                                    Actions
-                                </button>
-                            </th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -126,18 +119,24 @@ const PlayerList = ({ players, updatePlayer, updateCallback, handlePositionChang
             <div className="player-controls">
                 <button onClick={openCreateModal}>Create New Player</button>
                 <div className="position-select-container">
-                    <label className="selectPositionTitle" htmlFor="positionSelect">Select Position:</label>
-                    <select
-                        id="positionSelect"
-                        value={selectedPosition}
-                        onChange={handlePositionChange}
-                    >
+                    <label htmlFor="positionSelect">Select Position:</label>
+                    <select id="positionSelect" value={selectedPosition} onChange={handlePositionChange}>
                         <option value="">All Positions</option>
                         <option value="S">Setter</option>
                         <option value="OH">Outside Hitter</option>
                         <option value="MB">Middle Blocker</option>
                         <option value="L/DS">Libero/DS</option>
                         <option value="OP">Opposite Hitter</option>
+                    </select>
+                </div>
+
+                <div className="team-select-container">
+                    <label htmlFor="teamSelect">Select Team:</label>
+                    <select id="teamSelect" value={selectedTeamId} onChange={handleTeamChange}>
+                        <option value="">All Teams</option>
+                        {teams.map((team) => (
+                            <option key={team.teamId} value={team.teamId}>{team.teamName}</option>
+                        ))}
                     </select>
                 </div>
             </div>

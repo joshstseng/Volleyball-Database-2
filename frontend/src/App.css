@@ -100,7 +100,6 @@ td {
 
 thead {
   background-color: #3a3a3a; /* Dark header */
-  text-transform: uppercase;
   letter-spacing: 0.05rem;
 }
 
@@ -201,8 +200,8 @@ button:hover, input:hover, select:hover {
   margin-bottom: 20px; /* Space between button and dropdown */
 }
 
-/* Remove box around "Select Position" label */
-.position-select-container label {
+/* Remove box around "Select Position" and "Select Team" labels */
+.position-select-container label, .team-select-container label {
   background: none;
   border: none;
   padding: 0;
@@ -212,7 +211,7 @@ button:hover, input:hover, select:hover {
   color: #f0f0f0;
 }
 
-.position-select-container select {
+.position-select-container select, .team-select-container select {
   padding: 8px;
   border-radius: 5px;
   background-color: #333;
@@ -248,25 +247,6 @@ button:hover, input:hover, select:hover {
   color: #f0f0f0; /* Ensure no color change on hover */
 }
 
-.player-list-header, .team-list-header {
-  background: none; /* Remove background color */
-  border: none;     /* Remove border */
-  color: #f0f0f0;   /* Keep text color light for contrast */
-  font-size: 1.1rem; /* Adjust the font size as needed */
-  font-weight: bold; /* Make the text bold */
-  cursor: pointer;   /* Keep the pointer cursor for button effect */
-}
-
-.player-list-header:hover, .team-list-header:hover {
-  color: #aaa; /* Optional: Lighter text color on hover */
-  text-decoration: underline; /* Optional: Underline text on hover for emphasis */
-}
-
-/* Adjust the spacing for the arrow */
-.player-list-header::after, .team-list-header::after {
-  margin-left: 5px;
-}
-
 .player-controls, .team-controls {
   display: flex;
   flex-direction: column;
@@ -275,16 +255,8 @@ button:hover, input:hover, select:hover {
   margin-left: 20px;
 }
 
-.position-select-container {
+.position-select-container, .team-select-container {
   margin-top: 10px;
-}
-
-.position-select-container select {
-  padding: 8px;
-  border-radius: 5px;
-  background-color: #333;
-  color: #f0f0f0;
-  border: 1px solid #555;
 }
 
 .sticky-header {

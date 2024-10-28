@@ -13,7 +13,8 @@ function App() {
   // Modal state for Players
   const [isPlayerModalOpen, setIsPlayerModalOpen] = useState(false);
   const [currentPlayer, setCurrentPlayer] = useState({});
-  const [selectedPosition, setSelectedPosition] = useState("");
+  const [selectedPosition, setSelectedPosition] = useState(""); // Filter by position
+  const [selectedTeamId, setSelectedTeamId] = useState("");     // Filter by team
 
   // Modal state for Teams
   const [isTeamModalOpen, setIsTeamModalOpen] = useState(false);
@@ -26,12 +27,10 @@ function App() {
     } else if (activeTab === "Teams") {
       fetchTeams();
     }
-  }, [selectedPosition, activeTab]);
+  }, [selectedPosition, selectedTeamId, activeTab]);
 
   const fetchPlayers = async () => {
-    let endpoint = selectedPosition ?
-      `http://127.0.0.1:5000/players_by_position?position=${selectedPosition}` :
-      "http://127.0.0.1:5000/players";
+    let endpoint = `http://127.0.0.1:5000/players_filtered?position=${selectedPosition}&teamId=${selectedTeamId}`;
 
     try {
       const response = await fetch(endpoint);
@@ -110,6 +109,10 @@ function App() {
     setSelectedPosition(e.target.value);
   };
 
+  const handleTeamChange = (e) => {
+    setSelectedTeamId(e.target.value);
+  };
+
   const renderContent = () => {
     switch (activeTab) {
       case "Players":
@@ -130,6 +133,8 @@ function App() {
               updateCallback={onUpdatePlayers}
               handlePositionChange={handlePositionChange}
               selectedPosition={selectedPosition}
+              handleTeamChange={handleTeamChange}   // New handler for team selection
+              selectedTeamId={selectedTeamId}       // Pass selected team ID
               openCreateModal={openCreatePlayerModal}
             />
           </>

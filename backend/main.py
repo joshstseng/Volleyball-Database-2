@@ -94,6 +94,19 @@ def get_teams():
     json_teams = list(map(lambda x: x.to_json(), teams))
     return jsonify({"teams": json_teams})
 
+@app.route("/players_by_team", methods=["GET"])
+def get_players_by_team():
+    team_id = request.args.get("teamId")
+
+    if team_id:
+        players = Player.query.filter_by(team_id=team_id).all()
+    else:
+        # if no team is provided, return all players
+        players = Player.query.all()
+
+    json_players = list(map(lambda x: x.to_json(), players))
+    return jsonify({"players": json_players})
+
 # create
 @app.route("/create_team", methods=["POST"])
 def create_team():
@@ -151,6 +164,25 @@ def delete_team(team_id):
     db.session.commit()
 
     return jsonify({"message": "Team deleted!"}), 200
+
+@app.route("/players_filtered", methods=["GET"])
+def get_players_filtered():
+    position = request.args.get("position")
+    team_id = request.args.get("teamId")
+
+    # Start with the base query
+    query = Player.query
+
+    # Apply filters if the parameters are provided
+    if position:
+        query = query.filter_by(player_position=position)
+    if team_id:
+        query = query.filter_by(team_id=team_id)
+
+    players = query.all()
+    json_players = list(map(lambda x: x.to_json(), players))
+    return jsonify({"players": json_players})
+
 
 if __name__ == "__main__":
     with app.app_context():
