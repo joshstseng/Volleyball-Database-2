@@ -11,7 +11,7 @@ const TeamForm = ({ existingTeam = {}, updateCallback }) => {
     const onSubmit = async (e) => {
         e.preventDefault()
 
-        // Ensure wins and losses are non-negative integers
+        //  make sure wins and losses are non-negative integers
         const wins = Math.max(0, parseInt(numWin, 10) || 0);
         const losses = Math.max(0, parseInt(numLoss, 10) || 0);
 

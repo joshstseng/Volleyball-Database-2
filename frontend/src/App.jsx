@@ -1,30 +1,36 @@
 import { useState, useEffect } from 'react';
 import PlayerList from './PlayerList';
 import TeamList from './TeamList';
+import StaffList from './StaffList';
 import PlayerForm from './PlayerForm';
 import TeamForm from './TeamForm';
+import StaffForm from './StaffForm';
 import './App.css';
 
 function App() {
   const [activeTab, setActiveTab] = useState("Players");
   const [players, setPlayers] = useState([]);
   const [teams, setTeams] = useState([]);
+  const [staff, setStaff] = useState([]);
 
-  // Modal state for Players
+  // Modal states for Players, Teams, and Staff
   const [isPlayerModalOpen, setIsPlayerModalOpen] = useState(false);
-  const [currentPlayer, setCurrentPlayer] = useState({});
-  const [selectedPosition, setSelectedPosition] = useState(""); // Filter by position
-  const [selectedTeamId, setSelectedTeamId] = useState("");     // Filter by team
-
-  // Modal state for Teams
   const [isTeamModalOpen, setIsTeamModalOpen] = useState(false);
+  const [isStaffModalOpen, setIsStaffModalOpen] = useState(false);
+  const [currentPlayer, setCurrentPlayer] = useState({});
   const [currentTeam, setCurrentTeam] = useState({});
+  const [currentStaff, setCurrentStaff] = useState({});
+  const [selectedPosition, setSelectedPosition] = useState("");
+  const [selectedTeamId, setSelectedTeamId] = useState("");
 
   useEffect(() => {
     if (activeTab === "Players") {
       fetchPlayers();
-      fetchTeams(); // Fetch teams so that team names can be shown in PlayerForm
+      fetchTeams();
     } else if (activeTab === "Teams") {
+      fetchTeams();
+    } else if (activeTab === "Staff") {
+      fetchStaff();
       fetchTeams();
     }
   }, [selectedPosition, selectedTeamId, activeTab]);
@@ -63,7 +69,23 @@ function App() {
     }
   };
 
-  // Modal Handling for Players
+  const fetchStaff = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:5000/staff");
+      if (response.ok) {
+        const data = await response.json();
+        setStaff(data.staff);
+      } else {
+        console.error("Failed to fetch staff");
+        setStaff([]);
+      }
+    } catch (error) {
+      console.error("Error fetching staff:", error);
+      setStaff([]);
+    }
+  };
+
+  // Modal Handling for Players, Teams, and Staff
   const closePlayerModal = () => {
     setIsPlayerModalOpen(false);
     setCurrentPlayer({});
@@ -79,7 +101,6 @@ function App() {
     setIsPlayerModalOpen(true);
   };
 
-  // Modal Handling for Teams
   const closeTeamModal = () => {
     setIsTeamModalOpen(false);
     setCurrentTeam({});
@@ -95,6 +116,21 @@ function App() {
     setIsTeamModalOpen(true);
   };
 
+  const closeStaffModal = () => {
+    setIsStaffModalOpen(false);
+    setCurrentStaff({});
+  };
+
+  const openCreateStaffModal = () => {
+    setCurrentStaff({});
+    setIsStaffModalOpen(true);
+  };
+
+  const openEditStaffModal = (staffMember) => {
+    setCurrentStaff(staffMember);
+    setIsStaffModalOpen(true);
+  };
+
   const onUpdatePlayers = () => {
     closePlayerModal();
     fetchPlayers();
@@ -103,6 +139,11 @@ function App() {
   const onUpdateTeams = () => {
     closeTeamModal();
     fetchTeams();
+  };
+
+  const onUpdateStaff = () => {
+    closeStaffModal();
+    fetchStaff();
   };
 
   const handlePositionChange = (e) => {
@@ -133,8 +174,8 @@ function App() {
               updateCallback={onUpdatePlayers}
               handlePositionChange={handlePositionChange}
               selectedPosition={selectedPosition}
-              handleTeamChange={handleTeamChange}   // New handler for team selection
-              selectedTeamId={selectedTeamId}       // Pass selected team ID
+              handleTeamChange={handleTeamChange}
+              selectedTeamId={selectedTeamId}
               openCreateModal={openCreatePlayerModal}
             />
           </>
@@ -159,7 +200,25 @@ function App() {
           </>
         );
       case "Staff":
-        return <h2>Staff Page</h2>;
+        return (
+          <>
+            {isStaffModalOpen && (
+              <div className="modal">
+                <div className="modal-content">
+                  <span className="close" onClick={closeStaffModal}>&times;</span>
+                  <StaffForm existingStaff={currentStaff} updateCallback={onUpdateStaff} teams={teams} />
+                </div>
+              </div>
+            )}
+            <StaffList
+              staff={staff}
+              teams={teams}
+              updateStaff={openEditStaffModal}
+              updateCallback={onUpdateStaff}
+              openCreateStaffModal={openCreateStaffModal}
+            />
+          </>
+        );
       case "Matches":
         return <h2>Matches Page</h2>;
       default:

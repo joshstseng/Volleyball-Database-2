@@ -41,7 +41,7 @@ class Staff(db.Model):
 
     def to_json(self):
         return {
-            "staffID": self.staff_id,
+            "staffId": self.staff_id,
             "staffFirst": self.staff_first,
             "staffLast": self.staff_last,
             "teamId": self.team_id,

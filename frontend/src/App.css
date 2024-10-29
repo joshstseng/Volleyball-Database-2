@@ -175,7 +175,7 @@ button:hover, input:hover, select:hover {
 }
 
 /* Flexbox layout for table and controls */
-.player-list-container, .team-list-container {
+.player-list-container, .team-list-container, .staff-list-container {
   display: flex;
   justify-content: space-between; /* Align controls on the side */
   align-items: flex-start;

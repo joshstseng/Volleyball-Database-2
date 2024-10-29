@@ -65,11 +65,10 @@ const PlayerForm = ({ existingPlayer = {}, updateCallback, teams = [] }) => {
             <div>
                 <label className="modalParameter" htmlFor="playerNumber">Player Number:</label>
                 <input
-                    type="text"
+                    type="number"
                     id="playerNumber"
                     value={playerNumber}
                     onChange={(e) => setPlayerNumber(e.target.value)}
-                    required
                 />
             </div>
 
@@ -79,7 +78,6 @@ const PlayerForm = ({ existingPlayer = {}, updateCallback, teams = [] }) => {
                     id="playerPosition"
                     value={playerPosition}
                     onChange={(e) => setPlayerPosition(e.target.value)}
-                    required
                 >
                     <option value="">Select Position</option>
                     <option value="S">Setter</option>
@@ -96,7 +94,6 @@ const PlayerForm = ({ existingPlayer = {}, updateCallback, teams = [] }) => {
                     id="teamId"
                     value={teamId}
                     onChange={(e) => setTeamId(e.target.value)}
-                    required
                 >
                     <option value="">Select Team</option>
                     {teams.map((team) => (
