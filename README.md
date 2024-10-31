@@ -1,4 +1,4 @@
-# Volleyball Players Database
+# Volleyball Players and Teams
 
 ## Database Design:
 
