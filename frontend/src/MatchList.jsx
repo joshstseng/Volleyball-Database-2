@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
-const MatchList = ({ matches, updateMatch, updateCallBack, handleMatchChange, selectedMatch, openCreateMatchModal }) => {
-
+const MatchList = ({ matches, updateMatch, updateCallback, openCreateMatchModal, teams }) => {
     const [sortField, setSortField] = useState(null);
     const [sortOrder, setSortOrder] = useState(null);
 
@@ -10,9 +9,9 @@ const MatchList = ({ matches, updateMatch, updateCallBack, handleMatchChange, se
             const options = {
                 method: "DELETE"
             };
-            const response = await fetch (`http://127.0.0.1:5000/delete_match/${matchId}`, options);
+            const response = await fetch(`http://127.0.0.1:5000/delete_match/${matchId}`, options);
             if (response.status === 200) {
-                updateCallBack();
+                updateCallback();
             } else {
                 console.error("Failed to delete");
             }
@@ -23,42 +22,45 @@ const MatchList = ({ matches, updateMatch, updateCallBack, handleMatchChange, se
 
     const handleSort = (field) => {
         if (sortField === field) {
-            // cycle through: ascending -> descending -> none
             if (sortOrder === 'asc') {
                 setSortOrder('desc');
             } else if (sortOrder === 'desc') {
                 setSortOrder(null);
-                setSortField(null); // Clear sorting
+                setSortField(null);
             } else {
                 setSortOrder('asc');
             }
         } else {
-            // Set new field and start with ascending
             setSortField(field);
             setSortOrder('asc');
         }
     };
 
-    const sortedMatches = [...matches].sort((a, b) => {
-        if (!sortField || sortOrder === null) return 0; // no sorting
+    const getTeamByID = (team_id) => {
+        for (const team of teams) {
+            if (parseInt(team.teamId) === parseInt(team_id)) {
+                return team.teamName;
+            }
+        }
+        return "Unknown";
+    };
 
+    const sortedMatches = [...matches].sort((a, b) => {
+        if (!sortField || sortOrder === null) return 0;
         return sortOrder === 'asc'
-            ? a[sortField].localeCompare(b[sortField])
-            : b[sortField].localeCompare(a[sortField]);
-        
+            ? a[sortField].toString().localeCompare(b[sortField].toString())
+            : b[sortField].toString().localeCompare(a[sortField].toString());
     });
 
     const renderSortArrow = (field) => {
-        if (sortField !== field) return null; // no arrow if not the sorted field
-        if (sortOrder === 'asc') return " ↓";
-        if (sortOrder === 'desc') return " ↑";
-        return null;
+        if (sortField !== field) return null;
+        return sortOrder === 'asc' ? " ↓" : " ↑";
     };
 
     return (
         <div className="match-list-container">
             <div className="table-container">
-                <h2>Teams</h2>
+                <h2>Matches</h2>
                 <table>
                     <thead>
                         <tr>
@@ -78,27 +80,23 @@ const MatchList = ({ matches, updateMatch, updateCallBack, handleMatchChange, se
                                 </button>
                             </th>
                             <th>
-                                <button className="match-list-header action-header" disabled>
-                                    Set Score
-                                </button>
+                                <span className="match-list-header action-header">Set Score</span>
                             </th>
                             <th>
-                                <button className="player-list-header action-header" disabled>
-                                    Actions
-                                </button>
+                                <span className="match-list-header action-header">Actions</span>
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         {sortedMatches.map((match) => (
                             <tr key={match.matchId}>
-                                <td>{match.winningTeamId}</td>
-                                <td>{match.losingTeamId}</td>
+                                <td>{getTeamByID(match.winningTeamId)}</td>
+                                <td>{getTeamByID(match.losingTeamId)}</td>
                                 <td>{match.matchDate}</td>
-                                <td>{match.winningSetScore}-{match.losingSetScore}</td>
+                                <td>{match.winnerSetScore}-{match.loserSetScore}</td>
                                 <td>
-                                    <button onClick={() => updateTeam(team)}>Update</button>
-                                    <button onClick={() => onDelete(team.teamId)}>Delete</button>
+                                    <button onClick={() => updateMatch(match)}>Update</button>
+                                    <button onClick={() => onDelete(match.matchId)}>Delete</button>
                                 </td>
                             </tr>
                         ))}

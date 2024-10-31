@@ -267,23 +267,35 @@ def get_matches():
     json_matches = list(map(lambda x: x.to_json(), matches))
     return jsonify({"matches": json_matches})
 
+from datetime import datetime
+from flask import request, jsonify
+from config import app, db
+from models import Match
+
 @app.route("/create_match", methods=["POST"])
 def create_match():
     winning_team_id = request.json.get("winningTeamId")
     losing_team_id = request.json.get("losingTeamId")
-    match_date = request.json.get("matchDate")
+    match_date = request.json.get("matchDate")  # Expecting a string
     winner_set_score = request.json.get("winnerSetScore")
     loser_set_score = request.json.get("loserSetScore")
 
-    if (not winning_team_id or not losing_team_id):
-        return (
-            jsonify({"message": "You must include a winning team and losing team"}), 400
-        )
-    new_match = Match(winning_team_id=winning_team_id,
-                      losing_team_id=losing_team_id,
-                      match_date=match_date,
-                      winner_set_score=winner_set_score,
-                      loser_set_score=loser_set_score)
+    if not winning_team_id or not losing_team_id:
+        return jsonify({"message": "You must include a winning team and losing team"}), 400
+
+    # Convert the date string to a date object
+    try:
+        match_date = datetime.strptime(match_date, "%Y-%m-%d").date()
+    except ValueError:
+        return jsonify({"message": "Invalid date format. Use YYYY-MM-DD."}), 400
+
+    new_match = Match(
+        winning_team_id=winning_team_id,
+        losing_team_id=losing_team_id,
+        match_date=match_date,
+        winner_set_score=winner_set_score,
+        loser_set_score=loser_set_score
+    )
     
     try:
         db.session.add(new_match)
@@ -292,7 +304,6 @@ def create_match():
         return jsonify({"message": str(e)}), 400
 
     return jsonify({"message": "Match created!"}), 201
-
 
 @app.route("/update_match/<int:match_id>", methods=["PATCH"])
 def update_match(match_id):
@@ -305,14 +316,20 @@ def update_match(match_id):
 
     match.winning_team_id = data.get("winningTeamId", match.winning_team_id)
     match.losing_team_id = data.get("losingTeamId", match.losing_team_id)
-    match.match_date = data.get("matchDate", match.match_date)
+
+    # Convert the date string to a date object, if provided
+    match_date_str = data.get("matchDate")
+    if match_date_str:
+        try:
+            match.match_date = datetime.strptime(match_date_str, "%Y-%m-%d").date()
+        except ValueError:
+            return jsonify({"message": "Invalid date format. Use YYYY-MM-DD."}), 400
+
     match.winner_set_score = data.get("winnerSetScore", match.winner_set_score)
     match.loser_set_score = data.get("loserSetScore", match.loser_set_score)
 
-    if (not match.winning_team_id or not match.losing_team_id):
-        return (
-            jsonify({"message": "You must include a winning team and losing team"}), 400
-        )
+    if not match.winning_team_id or not match.losing_team_id:
+        return jsonify({"message": "You must include a winning team and losing team"}), 400
     
     db.session.commit()
 

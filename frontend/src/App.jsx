@@ -2,9 +2,11 @@ import { useState, useEffect } from 'react';
 import PlayerList from './PlayerList';
 import TeamList from './TeamList';
 import StaffList from './StaffList';
+import MatchList from './MatchList';
 import PlayerForm from './PlayerForm';
 import TeamForm from './TeamForm';
 import StaffForm from './StaffForm';
+import MatchForm from './MatchForm';
 import './App.css';
 
 function App() {
@@ -12,14 +14,17 @@ function App() {
   const [players, setPlayers] = useState([]);
   const [teams, setTeams] = useState([]);
   const [staff, setStaff] = useState([]);
+  const [matches, setMatches] = useState([]);
 
-  // Modal states for Players, Teams, and Staff
+  // Modal states for Players, Teams, Staff, and Matches
   const [isPlayerModalOpen, setIsPlayerModalOpen] = useState(false);
   const [isTeamModalOpen, setIsTeamModalOpen] = useState(false);
   const [isStaffModalOpen, setIsStaffModalOpen] = useState(false);
+  const [isMatchModalOpen, setIsMatchModalOpen] = useState(false);
   const [currentPlayer, setCurrentPlayer] = useState({});
   const [currentTeam, setCurrentTeam] = useState({});
   const [currentStaff, setCurrentStaff] = useState({});
+  const [currentMatch, setCurrentMatch] = useState({});
   const [selectedPosition, setSelectedPosition] = useState("");
   const [selectedTeamId, setSelectedTeamId] = useState("");
 
@@ -31,6 +36,9 @@ function App() {
       fetchTeams();
     } else if (activeTab === "Staff") {
       fetchStaff();
+      fetchTeams();
+    } else if (activeTab === "Matches") {
+      fetchMatches();
       fetchTeams();
     }
   }, [selectedPosition, selectedTeamId, activeTab]);
@@ -85,7 +93,23 @@ function App() {
     }
   };
 
-  // Modal Handling for Players, Teams, and Staff
+  const fetchMatches = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:5000/matches");
+      if (response.ok) {
+        const data = await response.json();
+        setMatches(data.matches);
+      } else {
+        console.error("Failed to fetch matches");
+        setMatches([]);
+      }
+    } catch (error) {
+      console.error("Error fetching matches:", error);
+      setMatches([]);
+    }
+  };
+
+  // Modal Handling for Players, Teams, Staff, and Matches
   const closePlayerModal = () => {
     setIsPlayerModalOpen(false);
     setCurrentPlayer({});
@@ -131,6 +155,21 @@ function App() {
     setIsStaffModalOpen(true);
   };
 
+  const closeMatchModal = () => {
+    setIsMatchModalOpen(false);
+    setCurrentMatch({});
+  };
+
+  const openCreateMatchModal = () => {
+    setCurrentMatch({});
+    setIsMatchModalOpen(true);
+  };
+
+  const openEditMatchModal = (match) => {
+    setCurrentMatch(match);
+    setIsMatchModalOpen(true);
+  };
+
   const onUpdatePlayers = () => {
     closePlayerModal();
     fetchPlayers();
@@ -144,6 +183,11 @@ function App() {
   const onUpdateStaff = () => {
     closeStaffModal();
     fetchStaff();
+  };
+
+  const onUpdateMatches = () => {
+    closeMatchModal();
+    fetchMatches();
   };
 
   const handlePositionChange = (e) => {
@@ -220,7 +264,25 @@ function App() {
           </>
         );
       case "Matches":
-        return <h2>Matches Page</h2>;
+        return (
+          <>
+            {isMatchModalOpen && (
+              <div className="modal">
+                <div className="modal-content">
+                  <span className="close" onClick={closeMatchModal}>&times;</span>
+                  <MatchForm existingMatch={currentMatch} updateCallback={onUpdateMatches} teams={teams} />
+                </div>
+              </div>
+            )}
+            <MatchList
+              matches={matches}
+              updateMatch={openEditMatchModal}
+              updateCallback={onUpdateMatches}
+              openCreateMatchModal={openCreateMatchModal}
+              teams={teams}
+            />
+          </>
+        );
       default:
         return null;
     }

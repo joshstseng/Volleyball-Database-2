@@ -175,7 +175,7 @@ button:hover, input:hover, select:hover {
 }
 
 /* Flexbox layout for table and controls */
-.player-list-container, .team-list-container, .staff-list-container {
+.player-list-container, .team-list-container, .staff-list-container, .match-list-container {
   display: flex;
   justify-content: space-between; /* Align controls on the side */
   align-items: flex-start;
@@ -201,7 +201,7 @@ button:hover, input:hover, select:hover {
 }
 
 /* Remove box around "Select Position" and "Select Team" labels */
-.position-select-container label, .team-select-container label {
+.position-select-container label, .team-select-container label, .match-select-container {
   background: none;
   border: none;
   padding: 0;
@@ -211,7 +211,7 @@ button:hover, input:hover, select:hover {
   color: #f0f0f0;
 }
 
-.position-select-container select, .team-select-container select {
+.position-select-container select, .team-select-container select, .match-select-container {
   padding: 8px;
   border-radius: 5px;
   background-color: #333;
@@ -219,7 +219,7 @@ button:hover, input:hover, select:hover {
   border: 1px solid #555;
 }
 
-.player-list-header, .team-list-header {
+.player-list-header, .team-list-header, .match-list-header {
   background: none; /* Remove background color */
   border: none;     /* Remove border */
   color: #f0f0f0;   /* Keep text color light for contrast */
@@ -228,7 +228,7 @@ button:hover, input:hover, select:hover {
   cursor: pointer;   /* Keep the pointer cursor for button effect */
 }
 
-.player-list-header:hover, .team-list-header:hover {
+.player-list-header:hover, .team-list-header:hover, .match-list-header:hover {
   color: #aaa; /* Optional: Lighter text color on hover */
   text-decoration: underline; /* Optional: Underline text on hover for emphasis */
 }
@@ -247,7 +247,7 @@ button:hover, input:hover, select:hover {
   color: #f0f0f0; /* Ensure no color change on hover */
 }
 
-.player-controls, .team-controls {
+.player-controls, .team-controls, match-controls {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -255,7 +255,7 @@ button:hover, input:hover, select:hover {
   margin-left: 20px;
 }
 
-.position-select-container, .team-select-container {
+.position-select-container, .team-select-container, .match-select-container {
   margin-top: 10px;
 }
 
