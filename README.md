@@ -12,7 +12,7 @@
 
 ## How to use:
 
-Note: Python is and Node are required to run the app.
+Note: Python and Node are required to run the app.
 
 ##### Run the backend:
 1. Open a terminal window
