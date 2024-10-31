@@ -1,6 +1,6 @@
 from flask import request, jsonify
 from config import app, db
-from models import Player, Team, Staff
+from models import Player, Team, Staff, Match
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 from sqlalchemy import select
@@ -164,24 +164,6 @@ def delete_team(team_id):
 
     return jsonify({"message": "Team deleted!"}), 200
 
-# @app.route("/players_filtered", methods=["GET"])
-# def get_players_filtered():
-#     position = request.args.get("position")
-#     team_id = request.args.get("teamId")
-
-#     # Start with the base query
-#     query = Player.query
-
-#     # Apply filters if the parameters are provided
-#     if position:
-#         query = query.filter_by(player_position=position)
-#     if team_id:
-#         query = query.filter_by(team_id=team_id)
-
-#     players = query.all()
-#     json_players = list(map(lambda x: x.to_json(), players))
-#     return jsonify({"players": json_players})
-
 @app.route("/players_filtered", methods=["GET"])
 def get_filtered_players():
     position = request.args.get("position")
@@ -280,6 +262,75 @@ def delete_staff(staff_id):
     db.session.commit()
 
     return jsonify({"message": "Staff deleted!"}), 200
+
+@app.route("/matches", methods=["GET"])
+def get_matches():
+    matches = Match.query.all()
+    json_matches = list(map(lambda x: x.to_json(), matches))
+    return jsonify({"matches": json_matches})
+
+@app.route("/create_match", methods=["POST"])
+def create_match():
+    winning_team_id = request.json.get("winningTeamId")
+    losing_team_id = request.json.get("losingTeamId")
+    match_date = request.json.get("matchDate")
+    winner_set_score = request.json.get("winnerSetScore")
+    loser_set_score = request.json.get("loserSetScore")
+
+    if (not winning_team_id or not losing_team_id):
+        return (
+            jsonify({"message": "You must include a winning team and losing team"}), 400
+        )
+    new_match = Match(winning_team_id=winning_team_id,
+                      losing_team_id=losing_team_id,
+                      match_date=match_date,
+                      winner_set_score=winner_set_score,
+                      loser_set_score=loser_set_score)
+    
+    try:
+        db.session.add(new_match)
+        db.session.commit()
+    except Exception as e:
+        return jsonify({"message": str(e)}), 400
+
+    return jsonify({"message": "Match created!"}), 201
+
+
+@app.route("/update_match/<int:match_id>", methods=["PATCH"])
+def update_match(match_id):
+    match = Match.query.get(match_id)
+
+    if not match:
+        return jsonify({"message": "Match not found"}), 400
+    
+    data = request.json
+
+    match.winning_team_id = data.get("winningTeamId", match.winning_team_id)
+    match.losing_team_id = data.get("losingTeamId", match.losing_team_id)
+    match.match_date = data.get("matchDate", match.match_date)
+    match.winner_set_score = data.get("winnerSetScore", match.winner_set_score)
+    match.loser_set_score = data.get("loserSetScore", match.loser_set_score)
+
+    if (not match.winning_team_id or not match.losing_team_id):
+        return (
+            jsonify({"message": "You must include a winning team and losing team"}), 400
+        )
+    
+    db.session.commit()
+
+    return jsonify({"message": "Match updated."}), 200
+
+@app.route("/delete_match/<int:match_id>", methods=["DELETE"])
+def delete_match(match_id):
+    match = Match.query.get(match_id)
+
+    if not match:
+        return jsonify({"message": "Match not found"}), 404
+    
+    db.session.delete(match)
+    db.session.commit()
+
+    return jsonify({"message": "Match deleted!"}), 200
 
 if __name__ == "__main__":
     with app.app_context():
