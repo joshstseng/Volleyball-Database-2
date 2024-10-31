@@ -12,6 +12,8 @@
 
 ## How to use:
 
+Note: Python is and Node are required to run the app.
+
 ##### Run the backend:
 1. Open a terminal window
 2. `cd backend`
