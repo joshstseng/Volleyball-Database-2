@@ -48,3 +48,22 @@ class Staff(db.Model):
             "title": self.title
         }
 
+
+class Match(db.Model):
+    match_id = db.Column(db.Integer, primary_key=True)
+    winning_team_id = db.Column(db.Integer, unique=False, nullable=False)
+    losing_team_id = db.Column(db.Integer, unique=False, nullable=False)
+    match_date = db.Column(db.Date, unique=False)
+    winner_set_score = db.Column(db.Integer, unique=False)
+    loser_set_score = db.Column(db.Integer, unique=False)
+
+    def to_json(self):
+        return {
+            "matchId": self.match_id,
+            "winningTeamId": self.winning_team_id,
+            "losingTeamId": self.losing_team_id,
+            "matchDate": self.match_date,
+            "winnerSetScore": self.winner_set_score,
+            "loserSetScore": self.loser_set_score
+        }
+
