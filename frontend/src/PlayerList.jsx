@@ -22,6 +22,7 @@ const PlayerList = ({ players, updatePlayer, updateCallback, handlePositionChang
 
     const handleSort = (field) => {
         if (sortField === field) {
+            console.log(field)
             if (sortOrder === 'asc') {
                 setSortOrder('desc');
             } else if (sortOrder === 'desc') {
@@ -47,7 +48,7 @@ const PlayerList = ({ players, updatePlayer, updateCallback, handlePositionChang
 
     const sortedPlayers = [...players].sort((a, b) => {
         if (!sortField || sortOrder === null) return 0;
-        if (sortField === 'playerNumber') {
+        if (sortField === 'playerNumber' || 'teamId') {
             return sortOrder === 'asc' ? a[sortField] - b[sortField] : b[sortField] - a[sortField];
         } else {
             return sortOrder === 'asc'
