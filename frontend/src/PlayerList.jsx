@@ -22,7 +22,6 @@ const PlayerList = ({ players, updatePlayer, updateCallback, handlePositionChang
 
     const handleSort = (field) => {
         if (sortField === field) {
-            console.log(field)
             if (sortOrder === 'asc') {
                 setSortOrder('desc');
             } else if (sortOrder === 'desc') {

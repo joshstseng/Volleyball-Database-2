@@ -1,6 +1,6 @@
 from flask import request, jsonify
 from config import app, db
-from models import Player, Team, Staff, Match
+from models import Player, Team, Staff
 from sqlalchemy import text
 
 @app.route("/players", methods=["GET"])
@@ -162,24 +162,6 @@ def delete_team(team_id):
 
     return jsonify({"message": "Team deleted!"}), 200
 
-# @app.route("/players_filtered", methods=["GET"])
-# def get_players_filtered():
-#     position = request.args.get("position")
-#     team_id = request.args.get("teamId")
-
-#     # Start with the base query
-#     query = Player.query
-
-#     # Apply filters if the parameters are provided
-#     if position:
-#         query = query.filter_by(player_position=position)
-#     if team_id:
-#         query = query.filter_by(team_id=team_id)
-
-#     players = query.all()
-#     json_players = list(map(lambda x: x.to_json(), players))
-#     return jsonify({"players": json_players})
-
 @app.route("/players_filtered", methods=["GET"])
 def get_filtered_players():
     position = request.args.get("position")
@@ -335,7 +317,7 @@ def update_match(match_id):
     
     db.session.commit()
 
-    return jsonify({"message": "Match update"}), 200
+    return jsonify({"message": "Match updated."}), 200
 
 @app.route("/delete_match/<int:match_id>", methods=["DELETE"])
 def delete_match(match_id):
