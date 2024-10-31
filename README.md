@@ -8,7 +8,7 @@
 
 **staff**(<ins>*staff_id*</ins>, staff_first, staff_last, team_id, title)
 
-**match**(<ins>*match_id*</ins>, winning_team_id, losing_team_id, match_date, final_set_score)
+**match**(<ins>*match_id*</ins>, winning_team_id, losing_team_id, match_date, winner_set_score, loser_set_score)
 
 ## How to use:
 
