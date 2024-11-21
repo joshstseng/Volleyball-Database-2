@@ -1,8 +1,8 @@
-# Volleyball Players Database
+# Volleyball Players and Teams
 
 ## Database Design:
 
-**team**(<ins>*team_id*</ins>, team_name, numWin, numLoss)
+**team**(<ins>*team_id*</ins>, team_name, num_win, num_loss)
 
 **player**(<ins>*player_id*</ins>, player_first, player_last, team_id, player_number)
 
