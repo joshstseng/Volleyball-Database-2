@@ -5,9 +5,23 @@ from sqlalchemy import text
 
 @app.route("/players", methods=["GET"])
 def get_players():
-    players = Player.query.all()
-    json_players = list(map(lambda x: x.to_json(), players))
-    return jsonify({"players": json_players})
+    # players = Player.query.all()
+    # json_players = list(map(lambda x: x.to_json(), players))
+    # return jsonify({"players": json_players})
+    query = "SELECT * FROM player"
+    result = db.session.execute(text(query)).mappings()
+
+    players = [
+        {
+            "playerId": row["player_id"],
+            "playerFirst": row["player_first"],
+            "playerLast": row["player_last"],
+            "teamId": row["team_id"],
+            "playerNumber": row["player_number"]
+        }
+        for row in result
+    ]
+    return jsonify({"staff": players})
 
 @app.route("/create_player", methods=["POST"])
 def create_player():
@@ -87,9 +101,24 @@ def get_players_by_position():
 # get
 @app.route("/teams", methods=["GET"])
 def get_teams():
-    teams = Team.query.all()
-    json_teams = list(map(lambda x: x.to_json(), teams))
-    return jsonify({"teams": json_teams})
+    # teams = Team.query.all()
+    # json_teams = list(map(lambda x: x.to_json(), teams))
+    # return jsonify({"teams": json_teams})
+
+    query = "SELECT * FROM team"
+    result = db.session.execute(text(query)).mappings()
+
+    teams = [
+        {
+            "teamId": row["team_id"],
+            "teamName": row["team_name"],
+            "numWin": row["num_win"],
+            "numLoss": row["num_loss"]
+        }
+        for row in result
+    ]
+    return jsonify({"teams": teams})
+
 
 @app.route("/players_by_team", methods=["GET"])
 def get_players_by_team():
@@ -199,9 +228,24 @@ def get_filtered_players():
 
 @app.route("/staff", methods=["GET"])
 def get_staff():
-    staff = Staff.query.all()
-    json_staff = list(map(lambda x: x.to_json(), staff))
-    return jsonify({"staff": json_staff})
+    # staff = Staff.query.all()
+    # json_staff = list(map(lambda x: x.to_json(), staff))
+    # return jsonify({"staff": json_staff})
+
+    query = "SELECT * FROM staff"
+    result = db.session.execute(text(query)).mappings()
+
+    staffs = [
+        {
+            "staffId": row["staff_id"],
+            "staffFirst": row["staff_first"],
+            "staffLast": row["staff_last"],
+            "teamId": row["team_id"],
+            "title": row["title"]
+        }
+        for row in result
+    ]
+    return jsonify({"staff": staffs})
 
 @app.route("/create_staff", methods=["POST"])
 def create_staff():
@@ -263,9 +307,25 @@ def delete_staff(staff_id):
 
 @app.route("/matches", methods=["GET"])
 def get_matches():
-    matches = Match.query.all()
-    json_matches = list(map(lambda x: x.to_json(), matches))
-    return jsonify({"matches": json_matches})
+    # matches = Match.query.all()
+    # json_matches = list(map(lambda x: x.to_json(), matches))
+    # return jsonify({"matches": json_matches})
+
+    query = "SELECT * FROM match"
+    result = db.session.execute(text(query)).mappings()
+
+    matches = [
+        {
+            "matchId": row["match_id"],
+            "winningTeamId": row["winning_team_id"],
+            "losingTeamId": row["losing_team_id"],
+            "matchDate": row["match_date"],
+            "winnerSetScore": row["winner_set_score"],
+            "loserSetScore": row["loser_set_score"]
+        }
+        for row in result
+    ]
+    return jsonify({"matches": matches})
 
 from datetime import datetime
 from flask import request, jsonify
@@ -310,7 +370,7 @@ def update_match(match_id):
     match = Match.query.get(match_id)
 
     if not match:
-        return jsonify({"message": "Match not found"}), 400
+        return jsonify({"message": "Match not found"}), 404
     
     data = request.json
 

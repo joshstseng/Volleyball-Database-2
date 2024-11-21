@@ -47,9 +47,12 @@ const PlayerList = ({ players, updatePlayer, updateCallback, handlePositionChang
 
     const sortedPlayers = [...players].sort((a, b) => {
         if (!sortField || sortOrder === null) return 0;
-        if (sortField === 'playerNumber' || 'teamId') {
+
+        if (sortField === 'playerNumber' || sortField === 'teamId') {
+            // number sorting for playerNumber and teamId fields
             return sortOrder === 'asc' ? a[sortField] - b[sortField] : b[sortField] - a[sortField];
         } else {
+            // string sorting for all other fields (e.g., playerFirst, playerLast)
             return sortOrder === 'asc'
                 ? a[sortField].localeCompare(b[sortField])
                 : b[sortField].localeCompare(a[sortField]);

@@ -58,7 +58,6 @@ const StaffList = ({ staff, updateStaff, updateCallback, openCreateStaffModal, h
             : b[sortField].localeCompare(a[sortField]);
     });
 
-    // Function to render the arrow based on sortOrder
     const renderSortArrow = (field) => {
         if (sortField !== field) return null; // no arrow if not the sorted field
         if (sortOrder === 'asc') return " ↓";

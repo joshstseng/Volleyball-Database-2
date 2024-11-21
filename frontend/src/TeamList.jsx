@@ -39,7 +39,6 @@ const TeamList = ({ teams, updateTeam, updateCallback, handleTeamChange, selecte
         }
     };
 
-    // Function to sort teams array based on field and order
     const sortedTeams = [...teams].sort((a, b) => {
         if (!sortField || sortOrder === null) return 0; // no sorting
 
@@ -49,7 +48,6 @@ const TeamList = ({ teams, updateTeam, updateCallback, handleTeamChange, selecte
         
     });
     
-    // Function to render the arrow based on sortOrder
     const renderSortArrow = (field) => {
         if (sortField !== field) return null; // no arrow if not the sorted field
         if (sortOrder === 'asc') return " ↓";
