@@ -14,6 +14,9 @@ class Team(db.Model):
             "numWin": self.num_win,
             "numLoss": self.num_loss
         }
+    __table_args__ = (
+        Index('idx_team_id', 'team_id'),
+    )
 
 class Player(db.Model):
     player_id = db.Column(db.Integer, primary_key=True)

@@ -5,6 +5,7 @@ from sqlalchemy import text
 from sqlalchemy import Index
 
 Index('idx_player_id', Player.player_id)
+Index('idx_team_id', Team.team_id)
 
 @app.route("/players", methods=["GET"])
 def get_players():
