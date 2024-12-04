@@ -1,6 +1,8 @@
 
 # Volleyball Players and Teams
 
+Management system designed for an organization (such as a volleyball league, athletic director, coach, or manager) to keep track of their teams, players, matches, and staff members.
+
 ## Database Design:
 
 **team**(<ins>*team_id*</ins>, team_name, num_win, num_loss)
@@ -25,6 +27,14 @@ Note: Python and Node are required to run the app.
 2. `cd frontend`
 3. `npm run dev`
 4. Open [http://localhost:5173/](http://localhost:5173/)
+
+
+## Indexes:
+**idx_player_id** - index for the player_id
+- Benefits: get_filtered_players(), get_players()
+
+**idx_team_id** - index for the team_id
+- Benefits: get_teams()
 
 ## Database Queries, Functions, and Endpoints:
 
