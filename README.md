@@ -30,7 +30,7 @@ Note: Python and Node are required to run the app.
 
 @app.route("/create_player", methods=["POST"])
 
-**create_player()**
+`create_player()`
 -   Uses ORM
 -   Takes input in the form of json (player_first player_last, team_id, player_number, player_position)
 -   Returns 201 on success - 400 otherwise
@@ -39,14 +39,14 @@ Note: Python and Node are required to run the app.
 
 @app.route("/players", methods=["GET"])
 
-**get_players()**
+`get_players()`
 -   Uses ORM
 -   Returns a list of players in json format
 
 
 @app.route("/update_player/\<int:player_id\>", methods=["PATCH"])
 
-**update_player(player_id)**
+`update_player(player_id)`
 -   Uses ORM
 -   Returns 200 on success - 404 if player not found - 400 otherwise
 -   Used in the update modal of the Players tab
