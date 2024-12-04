@@ -2,6 +2,9 @@ from flask import request, jsonify
 from config import app, db
 from models import Player, Team, Staff, Match
 from sqlalchemy import text
+from sqlalchemy import Index
+
+Index('idx_player_id', Player.player_id)
 
 @app.route("/players", methods=["GET"])
 def get_players():

@@ -1,4 +1,5 @@
 from config import db
+from sqlalchemy import Index
 
 class Team(db.Model):
     team_id = db.Column(db.Integer, primary_key=True)
@@ -32,6 +33,10 @@ class Player(db.Model):
             "playerPosition": self.player_position
         }
     
+    __table_args__ = (
+        Index('idx_player_id', 'player_id'),
+    )
+        
 class Staff(db.Model):
     staff_id = db.Column(db.Integer, primary_key=True)
     staff_first = db.Column(db.String(50), unique=False, nullable=False)
